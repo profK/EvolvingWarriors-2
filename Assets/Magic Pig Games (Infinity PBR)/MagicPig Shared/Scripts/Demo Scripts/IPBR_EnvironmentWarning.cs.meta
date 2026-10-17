@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 90b03ddc5fe8949eda93585c724e8b94
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44714
+  packageName: Weapons & Armor PBR Pack #1 - Fantasy RPG
+  packageVersion: 4.4.2
+  assetPath: Assets/Magic Pig Games (Infinity PBR)/MagicPig Shared/Scripts/Demo Scripts/IPBR_EnvironmentWarning.cs
+  uploadId: 998842

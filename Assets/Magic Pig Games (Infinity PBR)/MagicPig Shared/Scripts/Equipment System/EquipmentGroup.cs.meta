@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 9ed00def20cf446c68c4f176412995c3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44714
+  packageName: Weapons & Armor PBR Pack #1 - Fantasy RPG
+  packageVersion: 4.4.2
+  assetPath: Assets/Magic Pig Games (Infinity PBR)/MagicPig Shared/Scripts/Equipment System/EquipmentGroup.cs
+  uploadId: 998842

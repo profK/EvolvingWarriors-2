@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 2888d962b22ec4e3b8e13b48d506f522
+timeCreated: 1512948904
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44714
+  packageName: Weapons & Armor PBR Pack #1 - Fantasy RPG
+  packageVersion: 4.4.2
+  assetPath: Assets/Magic Pig Games (Infinity PBR)/MagicPig Shared/Editor/SFB_SaveObjectAsMesh.cs
+  uploadId: 998842
