@@ -1,10 +1,10 @@
 using UnityEngine;
 
 /// <summary>
-/// First-person camera controller.
-/// WASD moves the camera forward/backward and strafe left/right.
-/// Mouse left/right rotates the camera counter-clockwise/clockwise (yaw).
-/// Mouse up/down tilts the camera downwards/upwards (pitch).
+/// Flying camera controller with drag-to-look and WASD movement.
+/// WASD moves the camera forward/backward and strafe left/right relative to camera orientation.
+/// Left mouse button drag controls turning: drag left turns left, drag right turns right.
+/// Drag backward tilts the camera up, drag forward tilts the camera down.
 /// </summary>
 public class FirstPersonCameraController : MonoBehaviour
 {
@@ -14,10 +14,10 @@ public class FirstPersonCameraController : MonoBehaviour
 
     [Header("Mouse Look")]
     [Tooltip("Mouse sensitivity for yaw (horizontal rotation).")]
-    [SerializeField] float mouseSensitivityX = 2f;
+    [SerializeField] float mouseSensitivityX = 0.5f;
 
     [Tooltip("Mouse sensitivity for pitch (vertical rotation).")]
-    [SerializeField] float mouseSensitivityY = 2f;
+    [SerializeField] float mouseSensitivityY = 0.5f;
 
     [Tooltip("Minimum pitch angle (downwards).")]
     [SerializeField] float minPitch = -80f;
@@ -31,11 +31,14 @@ public class FirstPersonCameraController : MonoBehaviour
     /// <summary>Current yaw angle in degrees.</summary>
     float yawAngle;
 
+    /// <summary>Mouse position when drag started, used to compute drag delta.</summary>
+    Vector2 lastMousePosition;
+
     void Start()
     {
-        // Lock and hide the cursor so mouse movement is captured for camera look.
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // Keep cursor visible for drag-to-look interaction.
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         // Initialize rotation from the camera's current transform.
         yawAngle = transform.eulerAngles.y;
@@ -50,20 +53,33 @@ public class FirstPersonCameraController : MonoBehaviour
 
     void HandleMouseLook()
     {
-        // Mouse horizontal movement controls yaw (left/right rotation).
-        // Mouse left -> counter-clockwise (negative yaw change).
-        // Mouse right -> clockwise (positive yaw change).
-        float mouseX = Input.GetAxis("Mouse X");
-        yawAngle += mouseX * mouseSensitivityX;
+        if (Input.GetMouseButtonDown(0))
+        {
+            // Left mouse button pressed - record starting position for drag.
+            lastMousePosition = Input.mousePosition;
+            return;
+        }
 
-        // Mouse vertical movement controls pitch (up/down tilt).
-        // Mouse forward (up on screen) -> tilt downwards (negative pitch change).
-        // Mouse backward (down on screen) -> tilt upwards (positive pitch change).
-        float mouseY = Input.GetAxis("Mouse Y");
-        pitchAngle -= mouseY * mouseSensitivityY;
+        if (Input.GetMouseButton(0))
+        {
+            // Left mouse button held - compute drag delta from last frame's position.
+            Vector2 currentMousePosition = Input.mousePosition;
+            Vector2 dragDelta = currentMousePosition - lastMousePosition;
 
-        // Clamp pitch to avoid flipping.
-        pitchAngle = Mathf.Clamp(pitchAngle, minPitch, maxPitch);
+            // Drag left turns left (negative yaw change).
+            // Drag right turns right (positive yaw change).
+            yawAngle += dragDelta.x * mouseSensitivityX;
+
+            // Drag backward (positive y on screen) tilts up (positive pitch change).
+            // Drag forward (negative y on screen) tilts down (negative pitch change).
+            pitchAngle += dragDelta.y * mouseSensitivityY;
+
+            // Clamp pitch to avoid flipping.
+            pitchAngle = Mathf.Clamp(pitchAngle, minPitch, maxPitch);
+
+            // Update last position to current so we measure incremental drag.
+            lastMousePosition = currentMousePosition;
+        }
 
         // Apply rotation: yaw around Y axis, pitch around local X axis.
         transform.rotation = Quaternion.Euler(pitchAngle, yawAngle, 0f);
@@ -72,20 +88,15 @@ public class FirstPersonCameraController : MonoBehaviour
     void HandleMovement()
     {
         // WASD movement relative to camera orientation.
-        // W/S moves forward/backward along the camera's forward vector (flattened to horizontal).
-        // A/D strafes left/right along the camera's right vector.
+        // W/S moves forward/backward in the direction the camera is pointing.
+        // A/D strafes left/right relative to the camera's right vector.
         float moveForward = Input.GetAxis("Vertical");   // W = +1, S = -1
         float moveStrafe = Input.GetAxis("Horizontal");  // D = +1, A = -1
 
-        // Forward/backward direction, flattened to horizontal plane.
+        // Use the camera's own forward and right vectors directly.
+        // When the camera looks down, W moves down; when level, W moves forward.
         Vector3 forward = transform.forward;
-        forward.y = 0f;
-        forward.Normalize();
-
-        // Right direction (already horizontal for a level camera).
         Vector3 right = transform.right;
-        right.y = 0f;
-        right.Normalize();
 
         // Calculate movement delta.
         Vector3 movement = (forward * moveForward + right * moveStrafe) * moveSpeed * Time.deltaTime;

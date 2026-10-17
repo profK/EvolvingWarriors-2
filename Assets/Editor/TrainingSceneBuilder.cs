@@ -122,6 +122,8 @@ public class TrainingSceneBuilder : EditorWindow
         {
             camera.AddComponent(urpCameraType);
         }
+        // Add the first-person camera controller for WASD movement and LMB drag-to-look.
+        camera.AddComponent<FirstPersonCameraController>();
         camera.transform.position = new Vector3(0, 25f, 0);
         camera.transform.rotation = Quaternion.Euler(70f, 0f, 0f);
         
