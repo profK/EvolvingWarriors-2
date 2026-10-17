@@ -67,6 +67,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3504134430353283439, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1047699954948970275}
+    - targetCorrespondingSourceObject: {fileID: 3504134430353283439, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2048765432109876543}
+    - targetCorrespondingSourceObject: {fileID: 3504134430353283439, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2048765432109876544}
+    - targetCorrespondingSourceObject: {fileID: 3504134430353283439, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2048765432109876545}
   m_SourcePrefab: {fileID: 100100000, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
 --- !u!1 &6508550611535698564 stripped
 GameObject:
@@ -114,3 +123,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0992ea034334474a5cdf778c52b1ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WarriorObservationEncoder
+--- !u!114 &2048765432109876543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508550611535698564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51641e59e3c8943358b6be7f92dd418a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarriorCombatScorer
+  agent: {fileID: 1039885404981888867}
+  scoringEnabled: 0
+--- !u!114 &2048765432109876544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508550611535698564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5174642325e50442c95c64ec9fe249a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier:
+  surfaceId: body
+  ownerAgent: {fileID: 1039885404981888867}
+--- !u!136 &2048765432109876545
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508550611535698564}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 1.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.9, z: 0}

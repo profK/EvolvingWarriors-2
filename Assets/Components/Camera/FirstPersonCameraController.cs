@@ -4,7 +4,7 @@ using UnityEngine;
 /// Flying camera controller with drag-to-look and WASD movement.
 /// WASD moves the camera forward/backward and strafe left/right relative to camera orientation.
 /// Left mouse button drag controls turning: drag left turns left, drag right turns right.
-/// Drag backward tilts the camera up, drag forward tilts the camera down.
+/// Drag upward tilts the camera up, drag downward tilts the camera down.
 /// </summary>
 public class FirstPersonCameraController : MonoBehaviour
 {
@@ -70,9 +70,9 @@ public class FirstPersonCameraController : MonoBehaviour
             // Drag right turns right (positive yaw change).
             yawAngle += dragDelta.x * mouseSensitivityX;
 
-            // Drag backward (positive y on screen) tilts up (positive pitch change).
-            // Drag forward (negative y on screen) tilts down (negative pitch change).
-            pitchAngle += dragDelta.y * mouseSensitivityY;
+            // Drag upward (positive y on screen) tilts up (positive pitch change).
+            // Drag downward (negative y on screen) tilts down (negative pitch change).
+            pitchAngle -= dragDelta.y * mouseSensitivityY;
 
             // Clamp pitch to avoid flipping.
             pitchAngle = Mathf.Clamp(pitchAngle, minPitch, maxPitch);
@@ -88,13 +88,13 @@ public class FirstPersonCameraController : MonoBehaviour
     void HandleMovement()
     {
         // WASD movement relative to camera orientation.
-        // W/S moves forward/backward in the direction the camera is pointing.
+        // W/S moves the camera along its local forward vector.
         // A/D strafes left/right relative to the camera's right vector.
         float moveForward = Input.GetAxis("Vertical");   // W = +1, S = -1
         float moveStrafe = Input.GetAxis("Horizontal");  // D = +1, A = -1
 
-        // Use the camera's own forward and right vectors directly.
-        // When the camera looks down, W moves down; when level, W moves forward.
+        // Use the camera's local forward and right vectors directly.
+        // No projection or normalization — move exactly where the camera is pointing.
         Vector3 forward = transform.forward;
         Vector3 right = transform.right;
 

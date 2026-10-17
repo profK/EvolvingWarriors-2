@@ -169,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 410394, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.6
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 410394, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -214,8 +214,52 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 145208, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
+      insertIndex: -1
+      addedComponent: {fileID: 8567123456789012345}
   m_SourcePrefab: {fileID: 100100000, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
+--- !u!1 &9000000000000000000 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 145208, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
+  m_PrefabInstance: {fileID: 7400125921521206789}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &8567123456789012345
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 7400125921521206789}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9000000000000000000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.05
+  m_Height: 1.0
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0.35}
+--- !u!114 &8567123456789012346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 7400125921521206789}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9000000000000000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76d785279a0234218b16ff2354eec4b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier:
+  surfaceId: sword
 --- !u!4 &7400125921520829727 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 410394, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
