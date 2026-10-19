@@ -76,6 +76,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3504134430353283439, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2048765432109876545}
+    - targetCorrespondingSourceObject: {fileID: 3504134430353283439, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2048765432109876546}
+    - targetCorrespondingSourceObject: {fileID: 3504134430353283439, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2048765432109876547}
+    - targetCorrespondingSourceObject: {fileID: 3504134430353283439, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2048765432109876548}
   m_SourcePrefab: {fileID: 100100000, guid: 34b7842d6009c4fa390dc88105cb8aaf, type: 3}
 --- !u!1 &6508550611535698564 stripped
 GameObject:
@@ -98,6 +107,7 @@ MonoBehaviour:
   boneController: {fileID: 0}
   observationEncoder: {fileID: 0}
   combatScorer: {fileID: 0}
+  poseSolver: {fileID: 2048765432109876546}
 --- !u!114 &1660094229378713081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,3 +184,63 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &2048765432109876546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508550611535698564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarriorPoseSolver
+  boneController: {fileID: 0}
+  leftFootController: {fileID: 2048765432109876547}
+  rightFootController: {fileID: 2048765432109876548}
+  groundY: 0
+  balanceThreshold: 0.25
+  stepThreshold: 0.4
+--- !u!114 &2048765432109876547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508550611535698564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProceduralFootController
+  side: 0
+  footTransform: {fileID: 0}
+  upperLegTransform: {fileID: 0}
+  lowerLegTransform: {fileID: 0}
+  stepThreshold: 0.4
+  balanceThreshold: 0.25
+  arcLiftHeight: 0.15
+  stepPhaseDuration: 0.4
+  minStepDistance: 0.05
+--- !u!114 &2048765432109876548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508550611535698564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProceduralFootController
+  side: 1
+  footTransform: {fileID: 0}
+  upperLegTransform: {fileID: 0}
+  lowerLegTransform: {fileID: 0}
+  stepThreshold: 0.4
+  balanceThreshold: 0.25
+  arcLiftHeight: 0.15
+  stepPhaseDuration: 0.4
+  minStepDistance: 0.05

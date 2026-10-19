@@ -1,5 +1,16 @@
 using System;
 using UnityEngine;
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Assembly-CSharp-Editor")]
+
+/// <summary>
+/// Minimal interface for accessing bone transforms by index.
+/// Allows both the real WarriorBoneController and test mocks to work with WarriorPoseSolver.
+/// Defined here so it compiles in the main Assembly-CSharp project without editor regeneration.
+/// </summary>
+public interface IBoneTransformProvider
+{
+    Transform GetBoneTransform(int boneIndex);
+}
 
 /// <summary>
 /// Controls bone rotations for a warrior based on neural network outputs.
@@ -7,7 +18,7 @@ using UnityEngine;
 /// applies Quaternion.RotateTowards with configurable max angular speed.
 /// </summary>
 [RequireComponent(typeof(Animator))]
-public class WarriorBoneController : MonoBehaviour
+public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
 {
     public static readonly HumanBodyBones[] ControlledBones = new HumanBodyBones[]
     {

@@ -3,8 +3,9 @@ using UnityEngine;
 /// <summary>
 /// Main orchestrator for a warrior agent.
 /// 
-/// In FixedUpdate: encodes observations, runs MLP inference, applies bone rotations.
-/// Manages score, opponent reference, and active/inactive state.
+/// In FixedUpdate: encodes observations, runs MLP inference, applies bone rotations,
+/// then runs IK correction for foot grounding. Manages score, opponent reference,
+/// and active/inactive state.
 /// </summary>
 public class WarriorAgent : MonoBehaviour
 {
@@ -27,6 +28,9 @@ public class WarriorAgent : MonoBehaviour
 
     [Tooltip("Combat scorer.")]
     [SerializeField] WarriorCombatScorer combatScorer;
+
+    [Tooltip("Pose solver for foot IK and grounding.")]
+    [SerializeField] WarriorPoseSolver poseSolver;
 
     /// <summary>The warrior's current score for this round.</summary>
     public int Score { get; private set; }
@@ -88,6 +92,10 @@ public class WarriorAgent : MonoBehaviour
         if (combatScorer != null)
             combatScorer.Agent = this;
 
+        // Auto-resolve pose solver
+        if (poseSolver == null)
+            poseSolver = GetComponent<WarriorPoseSolver>();
+
         IsActive = false;
         Score = 0;
     }
@@ -104,6 +112,10 @@ public class WarriorAgent : MonoBehaviour
 
         // 3. Apply bone rotations
         boneController.ApplyOutputs(outputBuffer);
+
+        // 4. Apply IK correction for foot grounding
+        if (poseSolver != null)
+            poseSolver.Solve();
     }
 
     /// <summary>
@@ -130,6 +142,10 @@ public class WarriorAgent : MonoBehaviour
         Score = 0;
         if (boneController != null)
             boneController.ResetToRestPose();
+
+        // Reset foot IK state
+        if (poseSolver != null)
+            poseSolver.Reset();
     }
 
     /// <summary>
