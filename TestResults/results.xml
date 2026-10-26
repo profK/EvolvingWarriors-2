@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="10" result="Failed(Child)" total="10" passed="7" failed="3" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.0254665">
+  <test-suite type="TestSuite" id="1000" name="EvolvingWarriors 2" fullname="EvolvingWarriors 2" runstate="Runnable" testcasecount="26" result="Failed" site="Child" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.025467" total="10" passed="7" failed="3" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1030" name="Assembly-CSharp-Editor.dll" fullname="/Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="26" result="Failed" site="Child" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.022213" total="10" passed="7" failed="3" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="21531" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1011" name="TwoBoneIKTests" fullname="TwoBoneIKTests" classname="TwoBoneIKTests" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.021137" total="10" passed="7" failed="3" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1012" name="TestBasicIKAccuracy" fullname="TwoBoneIKTests.TestBasicIKAccuracy" methodname="TestBasicIKAccuracy" classname="TwoBoneIKTests" runstate="Runnable" seed="566969745" result="Failed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.009517" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Foot (0.00, 1.57, 0.50) should be within 0.05m of target (0.00, 1.30, 0.60), error=0.2852
+  Expected: less than or equal to 0.0500000007f
+  But was:  0.285192579f
+]]></message>
+            <stack-trace><![CDATA[at TwoBoneIKTests.TestBasicIKAccuracy () [0x0007b] in /Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Assets/Editor/TwoBoneIKTests.cs:76
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="1015" name="TestBeyondReach" fullname="TwoBoneIKTests.TestBeyondReach" methodname="TestBeyondReach" classname="TwoBoneIKTests" runstate="Runnable" seed="892050943" result="Passed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.002764" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1013" name="TestBoneLengthPreservation" fullname="TwoBoneIKTests.TestBoneLengthPreservation" methodname="TestBoneLengthPreservation" classname="TwoBoneIKTests" runstate="Runnable" seed="310504098" result="Passed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.000305" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1020" name="TestFootSoleFacesGround" fullname="TwoBoneIKTests.TestFootSoleFacesGround" methodname="TestFootSoleFacesGround" classname="TwoBoneIKTests" runstate="Runnable" seed="2076193006" result="Failed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.000444" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Foot sole dot up = 1.000. Expected negative (sole faces ground). Positive means sole faces sky (180 bug).
+  Expected: less than 0.0f
+  But was:  1.00000024f
+]]></message>
+            <stack-trace><![CDATA[at TwoBoneIKTests.TestFootSoleFacesGround () [0x0007b] in /Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Assets/Editor/TwoBoneIKTests.cs:212
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="1021" name="TestFootSoleFacesGroundWithHumanoidRestPose" fullname="TwoBoneIKTests.TestFootSoleFacesGroundWithHumanoidRestPose" methodname="TestFootSoleFacesGroundWithHumanoidRestPose" classname="TwoBoneIKTests" runstate="Runnable" seed="703430414" result="Failed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.000319" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Foot sole dot up = 1.000. Expected negative (sole faces ground) even with humanoid rest pose (180,0,0).
+  Expected: less than 0.0f
+  But was:  1.00000024f
+]]></message>
+            <stack-trace><![CDATA[at TwoBoneIKTests.TestFootSoleFacesGroundWithHumanoidRestPose () [0x0009b] in /Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Assets/Editor/TwoBoneIKTests.cs:244
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="1018" name="TestGroundClamping" fullname="TwoBoneIKTests.TestGroundClamping" methodname="TestGroundClamping" classname="TwoBoneIKTests" runstate="Runnable" seed="622969965" result="Passed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.000196" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1019" name="TestInfinityGuard" fullname="TwoBoneIKTests.TestInfinityGuard" methodname="TestInfinityGuard" classname="TwoBoneIKTests" runstate="Runnable" seed="1494465003" result="Passed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.000154" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1014" name="TestKneeAngleClamping" fullname="TwoBoneIKTests.TestKneeAngleClamping" methodname="TestKneeAngleClamping" classname="TwoBoneIKTests" runstate="Runnable" seed="730561643" result="Passed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.000317" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1017" name="TestNaNGuard" fullname="TwoBoneIKTests.TestNaNGuard" methodname="TestNaNGuard" classname="TwoBoneIKTests" runstate="Runnable" seed="1825428404" result="Passed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.000100" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1016" name="TestZeroDistance" fullname="TwoBoneIKTests.TestZeroDistance" methodname="TestZeroDistance" classname="TwoBoneIKTests" runstate="Runnable" seed="726867372" result="Passed" start-time="2026-10-23 23:15:35Z" end-time="2026-10-23 23:15:35Z" duration="0.000188" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: /Users/jeffreykesselman/Library/Application Support/DefaultCompany/EvolvingWarriors 2/TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

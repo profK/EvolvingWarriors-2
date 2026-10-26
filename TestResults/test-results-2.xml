@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="33" result="Failed(Child)" total="33" passed="13" failed="20" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.0229432">
+  <test-suite type="TestSuite" id="1000" name="EvolvingWarriors 2" fullname="EvolvingWarriors 2" runstate="Runnable" testcasecount="33" result="Failed" site="Child" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.022943" total="33" passed="13" failed="20" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1038" name="Assembly-CSharp-Editor.dll" fullname="/Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="33" result="Failed" site="Child" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.020320" total="33" passed="13" failed="20" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="52744" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1001" name="FootOnFloorTests" fullname="FootOnFloorTests" classname="FootOnFloorTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.015500" total="7" passed="4" failed="3" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1003" name="TestFootClampedToGroundY_WhenTargetBelowGround" fullname="FootOnFloorTests.TestFootClampedToGroundY_WhenTargetBelowGround" methodname="TestFootClampedToGroundY_WhenTargetBelowGround" classname="FootOnFloorTests" runstate="Runnable" seed="1391487869" result="Failed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.005964" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Solve should succeed with ground clamping
+  Expected: True
+  But was:  False
+]]></message>
+            <stack-trace><![CDATA[at FootOnFloorTests.TestFootClampedToGroundY_WhenTargetBelowGround () [0x0007d] in /Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Assets/Editor/FootOnFloorTests.cs:65
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="1005" name="TestFootControllerPlantedStateKeepsFootOnGround" fullname="FootOnFloorTests.TestFootControllerPlantedStateKeepsFootOnGround" methodname="TestFootControllerPlantedStateKeepsFootOnGround" classname="FootOnFloorTests" runstate="Runnable" seed="1722277272" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.002552" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1006" name="TestFootControllerStepCycleReturnsToGround" fullname="FootOnFloorTests.TestFootControllerStepCycleReturnsToGround" methodname="TestFootControllerStepCycleReturnsToGround" classname="FootOnFloorTests" runstate="Runnable" seed="135828432" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000772" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1004" name="TestFootSoleFacesGround_AfterGroundClamping" fullname="FootOnFloorTests.TestFootSoleFacesGround_AfterGroundClamping" methodname="TestFootSoleFacesGround_AfterGroundClamping" classname="FootOnFloorTests" runstate="Runnable" seed="2029252887" result="Failed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000190" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Solve should succeed with ground clamping
+  Expected: True
+  But was:  False
+]]></message>
+            <stack-trace><![CDATA[at FootOnFloorTests.TestFootSoleFacesGround_AfterGroundClamping () [0x0007d] in /Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Assets/Editor/FootOnFloorTests.cs:87
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="1002" name="TestFootStaysAtGroundY_WhenTargetIsOnGround" fullname="FootOnFloorTests.TestFootStaysAtGroundY_WhenTargetIsOnGround" methodname="TestFootStaysAtGroundY_WhenTargetIsOnGround" classname="FootOnFloorTests" runstate="Runnable" seed="96407606" result="Failed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000144" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Solve should succeed
+  Expected: True
+  But was:  False
+]]></message>
+            <stack-trace><![CDATA[at FootOnFloorTests.TestFootStaysAtGroundY_WhenTargetIsOnGround () [0x00077] in /Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Assets/Editor/FootOnFloorTests.cs:43
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="1008" name="TestIKPipeline_ElevatedGroundY" fullname="FootOnFloorTests.TestIKPipeline_ElevatedGroundY" methodname="TestIKPipeline_ElevatedGroundY" classname="FootOnFloorTests" runstate="Runnable" seed="1412666384" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.001074" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1007" name="TestIKPipeline_FootTargetOnGroundYieldsFootOnGround" fullname="FootOnFloorTests.TestIKPipeline_FootTargetOnGroundYieldsFootOnGround" methodname="TestIKPipeline_FootTargetOnGroundYieldsFootOnGround" classname="FootOnFloorTests" runstate="Runnable" seed="577294215" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000120" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1009" name="ProceduralFootControllerTests" fullname="ProceduralFootControllerTests" classname="ProceduralFootControllerTests" runstate="NotRunnable" testcasecount="9" result="Failed" label="Invalid" site="SetUp" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000454" total="9" passed="0" failed="9" inconclusive="0" skipped="0" asserts="0">
+        <properties>
+          <property name="_SKIPREASON" value="Invalid signature for SetUp or TearDown method: TearDownController" />
+        </properties>
+        <failure>
+          <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+        </failure>
+        <test-case id="1017" name="TestArcTrajectory" fullname="ProceduralFootControllerTests.TestArcTrajectory" methodname="TestArcTrajectory" classname="ProceduralFootControllerTests" runstate="Runnable" seed="980161373" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1010" name="TestAwakeInitialization" fullname="ProceduralFootControllerTests.TestAwakeInitialization" methodname="TestAwakeInitialization" classname="ProceduralFootControllerTests" runstate="Runnable" seed="89738793" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1016" name="TestFullStepCycle" fullname="ProceduralFootControllerTests.TestFullStepCycle" methodname="TestFullStepCycle" classname="ProceduralFootControllerTests" runstate="Runnable" seed="1992374700" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1018" name="TestNullFootTransform" fullname="ProceduralFootControllerTests.TestNullFootTransform" methodname="TestNullFootTransform" classname="ProceduralFootControllerTests" runstate="Runnable" seed="1980200989" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1012" name="TestPlantedStateClampY" fullname="ProceduralFootControllerTests.TestPlantedStateClampY" methodname="TestPlantedStateClampY" classname="ProceduralFootControllerTests" runstate="Runnable" seed="1844500554" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1011" name="TestPlantedStateHoldsXZ" fullname="ProceduralFootControllerTests.TestPlantedStateHoldsXZ" methodname="TestPlantedStateHoldsXZ" classname="ProceduralFootControllerTests" runstate="Runnable" seed="1284939496" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1013" name="TestRequestStepAccepted" fullname="ProceduralFootControllerTests.TestRequestStepAccepted" methodname="TestRequestStepAccepted" classname="ProceduralFootControllerTests" runstate="Runnable" seed="961381758" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1015" name="TestRequestStepRejectedFromLifting" fullname="ProceduralFootControllerTests.TestRequestStepRejectedFromLifting" methodname="TestRequestStepRejectedFromLifting" classname="ProceduralFootControllerTests" runstate="Runnable" seed="936743491" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1014" name="TestRequestStepRejectedMicroStep" fullname="ProceduralFootControllerTests.TestRequestStepRejectedMicroStep" methodname="TestRequestStepRejectedMicroStep" classname="ProceduralFootControllerTests" runstate="Runnable" seed="359179306" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownController]]></message>
+          </failure>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1019" name="TwoBoneIKTests" fullname="TwoBoneIKTests" classname="TwoBoneIKTests" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.003558" total="10" passed="9" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1020" name="TestBasicIKAccuracy" fullname="TwoBoneIKTests.TestBasicIKAccuracy" methodname="TestBasicIKAccuracy" classname="TwoBoneIKTests" runstate="Runnable" seed="1272095783" result="Failed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000985" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Foot (0.00, 1.57, 0.50) should be within 0.05m of target (0.00, 1.30, 0.60), error=0.2852
+  Expected: less than or equal to 0.0500000007f
+  But was:  0.285192579f
+]]></message>
+            <stack-trace><![CDATA[at TwoBoneIKTests.TestBasicIKAccuracy () [0x0007b] in /Users/jeffreykesselman/Documents/projects/EvolvingWarriors 2/Assets/Editor/TwoBoneIKTests.cs:76
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="1023" name="TestBeyondReach" fullname="TwoBoneIKTests.TestBeyondReach" methodname="TestBeyondReach" classname="TwoBoneIKTests" runstate="Runnable" seed="1324727397" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000297" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1021" name="TestBoneLengthPreservation" fullname="TwoBoneIKTests.TestBoneLengthPreservation" methodname="TestBoneLengthPreservation" classname="TwoBoneIKTests" runstate="Runnable" seed="210049403" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000145" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1028" name="TestFootSoleFacesGround" fullname="TwoBoneIKTests.TestFootSoleFacesGround" methodname="TestFootSoleFacesGround" classname="TwoBoneIKTests" runstate="Runnable" seed="137828410" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000171" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1029" name="TestFootSoleFacesGroundWithHumanoidRestPose" fullname="TwoBoneIKTests.TestFootSoleFacesGroundWithHumanoidRestPose" methodname="TestFootSoleFacesGroundWithHumanoidRestPose" classname="TwoBoneIKTests" runstate="Runnable" seed="332583166" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000180" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1026" name="TestGroundClamping" fullname="TwoBoneIKTests.TestGroundClamping" methodname="TestGroundClamping" classname="TwoBoneIKTests" runstate="Runnable" seed="2002761921" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000107" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1027" name="TestInfinityGuard" fullname="TwoBoneIKTests.TestInfinityGuard" methodname="TestInfinityGuard" classname="TwoBoneIKTests" runstate="Runnable" seed="142555783" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000130" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1022" name="TestKneeAngleClamping" fullname="TwoBoneIKTests.TestKneeAngleClamping" methodname="TestKneeAngleClamping" classname="TwoBoneIKTests" runstate="Runnable" seed="1752919577" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000235" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1025" name="TestNaNGuard" fullname="TwoBoneIKTests.TestNaNGuard" methodname="TestNaNGuard" classname="TwoBoneIKTests" runstate="Runnable" seed="2093961924" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000077" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1024" name="TestZeroDistance" fullname="TwoBoneIKTests.TestZeroDistance" methodname="TestZeroDistance" classname="TwoBoneIKTests" runstate="Runnable" seed="364450745" result="Passed" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000074" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1030" name="WarriorPoseSolverTests" fullname="WarriorPoseSolverTests" classname="WarriorPoseSolverTests" runstate="NotRunnable" testcasecount="7" result="Failed" label="Invalid" site="SetUp" start-time="2026-10-24 01:15:58Z" end-time="2026-10-24 01:15:58Z" duration="0.000222" total="7" passed="0" failed="7" inconclusive="0" skipped="0" asserts="0">
+        <properties>
+          <property name="_SKIPREASON" value="Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy" />
+        </properties>
+        <failure>
+          <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy]]></message>
+        </failure>
+        <output><![CDATA[Saving results to: /Users/jeffreykesselman/Library/Application Support/DefaultCompany/EvolvingWarriors 2/TestResults.xml
+]]></output>
+        <test-case id="1031" name="TestAutoResolveReferences" fullname="WarriorPoseSolverTests.TestAutoResolveReferences" methodname="TestAutoResolveReferences" classname="WarriorPoseSolverTests" runstate="Runnable" seed="947663985" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1033" name="TestBalanceTriggersStep" fullname="WarriorPoseSolverTests.TestBalanceTriggersStep" methodname="TestBalanceTriggersStep" classname="WarriorPoseSolverTests" runstate="Runnable" seed="515169036" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1036" name="TestGroundPenetrationCorrection" fullname="WarriorPoseSolverTests.TestGroundPenetrationCorrection" methodname="TestGroundPenetrationCorrection" classname="WarriorPoseSolverTests" runstate="Runnable" seed="1805201940" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1035" name="TestIKAppliedToLegChains" fullname="WarriorPoseSolverTests.TestIKAppliedToLegChains" methodname="TestIKAppliedToLegChains" classname="WarriorPoseSolverTests" runstate="Runnable" seed="1020248074" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1034" name="TestReachTriggersStep" fullname="WarriorPoseSolverTests.TestReachTriggersStep" methodname="TestReachTriggersStep" classname="WarriorPoseSolverTests" runstate="Runnable" seed="934240683" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1037" name="TestResetRestsFootControllers" fullname="WarriorPoseSolverTests.TestResetRestsFootControllers" methodname="TestResetRestsFootControllers" classname="WarriorPoseSolverTests" runstate="Runnable" seed="2008898380" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy]]></message>
+          </failure>
+        </test-case>
+        <test-case id="1032" name="TestSolveWithNoBalanceIssue" fullname="WarriorPoseSolverTests.TestSolveWithNoBalanceIssue" methodname="TestSolveWithNoBalanceIssue" classname="WarriorPoseSolverTests" runstate="Runnable" seed="673358986" result="Failed" label="Invalid" site="Parent" start-time="0001-01-01 00:00:00Z" end-time="0001-01-01 00:00:00Z" duration="0.000000" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[Invalid signature for SetUp or TearDown method: TearDownWarriorHierarchy]]></message>
+          </failure>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

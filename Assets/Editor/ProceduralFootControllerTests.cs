@@ -17,7 +17,7 @@ public class ProceduralFootControllerTests
     Transform lowerLegTfm;
 
     [SetUp]
-    void SetUpController()
+    public void SetUpController()
     {
         testGO = new GameObject("TestFootController");
 
@@ -55,7 +55,7 @@ public class ProceduralFootControllerTests
     }
 
     [TearDown]
-    void TearDownController()
+    public void TearDownController()
     {
         if (testGO != null)
             Object.DestroyImmediate(testGO);

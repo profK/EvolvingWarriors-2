@@ -153,7 +153,9 @@ public static class TwoBoneIK
                 float adj = Mathf.Cos(kneeAngle) * upperLegLen;
                 float opp = Mathf.Sin(kneeAngle) * upperLegLen;
 
-                // Apply bend sign even in fallback path so knees bend backward for forward foot placements
+                // Apply bend sign even in fallback path so knees bend backward for forward foot placements.
+                // bendNormal (Cross(dir, sideDir)) points DOWN when foot is forward and below hip.
+                // bendSign = -1 for forward targets, so knee offset = -bendNormal*opp points UP.
                 float forwardDot = Vector3.Dot(dir, bendAxis);
                 float bendSign = forwardDot > 0f ? -1f : 1f;
 
@@ -163,7 +165,8 @@ public static class TwoBoneIK
         else
         {
             sideDir /= sideMag; // normalized side direction
-            // bendNormal is perpendicular to both dir and sideDir, pointing "up" in the bend plane
+            // bendNormal is perpendicular to both dir and sideDir. When the foot target is below
+            // the hip, bendNormal points DOWN (toward ground). The knee bends along -bendNormal (UP).
             bendNormal = Vector3.Cross(dir, sideDir);
             if (bendNormal.sqrMagnitude < 0.001f)
             {
@@ -179,8 +182,9 @@ public static class TwoBoneIK
                 float opp = Mathf.Sin(kneeAngle) * upperLegLen;  // distance perpendicular (bend amount)
 
                 // Determine bend sign: the knee should bend "backward" relative to the character.
-                // When the foot is in front (dir aligns with forward), bendNormal points toward
-                // -up in the bend plane. Flip based on whether the foot is forward or behind.
+                // bendNormal (Cross(dir, sideDir)) points DOWN when foot is forward and below hip.
+                // bendSign = -1 for forward targets, so knee offset = -bendNormal*opp points UP
+                // (knee bends upward/backward). bendSign = +1 for rear targets.
                 float forwardDot = Vector3.Dot(dir, bendAxis);
                 float bendSign = forwardDot > 0f ? -1f : 1f;
 
@@ -239,6 +243,63 @@ public static class TwoBoneIK
         else
         {
             lowerLegTransform.localRotation = targetLowerRot;
+        }
+
+        // --- Set foot rotation ---
+        // Foot sole must always face the ground. bendNormal (Cross(dir, sideDir)) points DOWN
+        // when the foot target is forward and below the hip, but points UP when the target is
+        // behind the hip. To handle both cases, sign bendNormal so its Y component is always
+        // negative (points toward ground). Unity's humanoid rig convention has the foot bone's
+        // local Y-axis pointing DOWN through the sole, so mapping sole_dir to local Y achieves
+        // sole-faces-ground regardless of target direction.
+        // For the foot's forward direction, project the character's forward vector onto the
+        // plane perpendicular to soleDir. This keeps the foot facing the character's forward
+        // direction while staying orthogonal to the sole direction.
+        Vector3 soleDir;
+        if (Mathf.Abs(bendNormal.y) < 0.001f)
+        {
+            // bendNormal is nearly horizontal (degenerate side case) — use pure down
+            soleDir = Vector3.down;
+        }
+        else if (bendNormal.y < 0f)
+        {
+            soleDir = bendNormal; // already points down
+        }
+        else
+        {
+            soleDir = -bendNormal; // negate so it points down
+        }
+
+        // Project character forward onto the plane perpendicular to soleDir
+        Vector3 footForward = rootTransform.forward - soleDir * Vector3.Dot(rootTransform.forward, soleDir);
+        if (footForward.sqrMagnitude >= 0.000001f)
+        {
+            footForward.Normalize();
+        }
+        else
+        {
+            // Character forward is parallel to soleDir (degenerate) — use dir horizontal component
+            Vector3 dirHorizontal = new Vector3(dir.x, 0f, dir.z);
+            if (dirHorizontal.sqrMagnitude > 0.001f)
+                footForward = dirHorizontal.normalized;
+            else
+                footForward = sideDir.normalized; // last resort fallback
+        }
+
+        Quaternion targetFootRot = Quaternion.LookRotation(footForward, soleDir);
+        // Guard against NaN/Infinity in computed rotation
+        if (!IsValid(targetFootRot.x) || !IsValid(targetFootRot.y) ||
+            !IsValid(targetFootRot.z) || !IsValid(targetFootRot.w))
+            return false;
+
+        // Convert world rotation to local rotation for foot
+        if (footTransform.parent != null)
+        {
+            footTransform.localRotation = Quaternion.Inverse(footTransform.parent.rotation) * targetFootRot;
+        }
+        else
+        {
+            footTransform.localRotation = targetFootRot;
         }
 
         return true;

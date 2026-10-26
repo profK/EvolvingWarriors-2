@@ -139,25 +139,47 @@ public class WarriorPoseSolver : MonoBehaviour
         Vector3 comOffset = hips.position - footMidpoint;
         float horizontalComOffset = new Vector3(comOffset.x, 0, comOffset.z).magnitude;
 
-        // 4. Evaluate balance — if CoM shifted beyond threshold, trigger step on the farther foot
+        // 4. Evaluate balance — if CoM shifted beyond threshold, move hips to center over feet
+        // We move the hips bone's local position horizontally toward the foot midpoint.
+        // This centers the hips over the feet, keeping feet planted.
         if (horizontalComOffset > balanceThreshold)
         {
             Vector3 comDir = new Vector3(comOffset.x, 0, comOffset.z);
             if (comDir.sqrMagnitude > 0.001f)
             {
                 comDir /= comDir.magnitude;
-                // Project each foot's position onto CoM direction
-                float leftProj = Vector3.Dot(new Vector3(leftFootPos.x, 0, leftFootPos.z), comDir);
-                float rightProj = Vector3.Dot(new Vector3(rightFootPos.x, 0, rightFootPos.z), comDir);
-                // Step with the foot that is behind the CoM shift (smaller projection)
-                Vector3 stepTarget = hips.position + comDir * 0.3f;
-                if (leftProj < rightProj)
+                
+                // Calculate the horizontal offset needed to center hips over foot midpoint
+                // We want hips to be at the foot midpoint horizontally
+                Vector3 desiredHipsOffset = -comOffset;
+                desiredHipsOffset.y = 0f; // Keep only horizontal component
+                
+                // Limit the movement to keep hips within a reasonable range over the feet
+                // Don't move more than the balance threshold (keeps hips over the foot base)
+                float moveDistance = Mathf.Min(desiredHipsOffset.magnitude, balanceThreshold);
+                Vector3 moveDirection = desiredHipsOffset.normalized;
+                Vector3 hipMove = moveDirection * moveDistance;
+                
+                // Apply the horizontal movement to the hips bone's local position
+                // This shifts the hips over the feet while keeping feet planted
+                Vector3 currentLocalPos = hips.localPosition;
+                Vector3 newLocalPos = currentLocalPos + new Vector3(hipMove.x, 0f, hipMove.z);
+                hips.localPosition = newLocalPos;
+                
+                // Also move the spine and chest bones to maintain body alignment
+                Transform spine = boneController.GetBoneTransform(1); // Spine
+                Transform chest = boneController.GetBoneTransform(2); // Chest
+                
+                if (spine != null)
                 {
-                    leftFootController.RequestStep(new Vector3(stepTarget.x, 0, stepTarget.z));
+                    // Move spine by half the hip movement to distribute the shift
+                    spine.localPosition = spine.localPosition + new Vector3(hipMove.x * 0.5f, 0f, hipMove.z * 0.5f);
                 }
-                else
+                
+                if (chest != null)
                 {
-                    rightFootController.RequestStep(new Vector3(stepTarget.x, 0, stepTarget.z));
+                    // Move chest by one-third the hip movement
+                    chest.localPosition = chest.localPosition + new Vector3(hipMove.x * 0.33f, 0f, hipMove.z * 0.33f);
                 }
             }
         }
@@ -206,11 +228,13 @@ public class WarriorPoseSolver : MonoBehaviour
         if (leftUpperLeg != null && leftLowerLeg != null && leftFootBone != null)
         {
             Vector3 leftTarget = leftFootController.GetFootWorldPosition();
+            leftTarget.y = groundY; // Force ground level
             TwoBoneIK.Solve(leftTarget, root, leftUpperLeg, leftLowerLeg, leftFootBone, groundY);
         }
         if (rightUpperLeg != null && rightLowerLeg != null && rightFootBone != null)
         {
             Vector3 rightTarget = rightFootController.GetFootWorldPosition();
+            rightTarget.y = groundY; // Force ground level
             TwoBoneIK.Solve(rightTarget, root, rightUpperLeg, rightLowerLeg, rightFootBone, groundY);
         }
 
@@ -237,6 +261,33 @@ public class WarriorPoseSolver : MonoBehaviour
     }
 
     /// <summary>
+    /// Solves leg IK with grounded targets to ensure legs point downward.
+    /// Called during Reset() to establish proper initial leg orientation.
+    /// </summary>
+    void SolveLegOrientation()
+    {
+        // Get bone transforms
+        Transform leftUpperLeg = boneController.GetBoneTransform(LeftUpperLeg);
+        Transform leftLowerLeg = boneController.GetBoneTransform(LeftLowerLeg);
+        Transform rightUpperLeg = boneController.GetBoneTransform(RightUpperLeg);
+        Transform rightLowerLeg = boneController.GetBoneTransform(RightLowerLeg);
+        Transform leftFootBone = boneController.GetBoneTransform(LeftFoot);
+        Transform rightFootBone = boneController.GetBoneTransform(RightFoot);
+
+        // Get foot positions from controllers and force Y to ground level
+        Vector3 leftFootPos = leftFootController.GetFootWorldPosition();
+        Vector3 rightFootPos = rightFootController.GetFootWorldPosition();
+        leftFootPos.y = groundY;
+        rightFootPos.y = groundY;
+
+        // Solve IK with grounded targets to orient legs downward
+        if (leftUpperLeg != null && leftLowerLeg != null && leftFootBone != null)
+            TwoBoneIK.Solve(leftFootPos, transform, leftUpperLeg, leftLowerLeg, leftFootBone, groundY);
+        if (rightUpperLeg != null && rightLowerLeg != null && rightFootBone != null)
+            TwoBoneIK.Solve(rightFootPos, transform, rightUpperLeg, rightLowerLeg, rightFootBone, groundY);
+    }
+
+    /// <summary>
     /// Resets both foot controllers to Planted state at their current bone positions.
     /// Called at the start of a new round.
     /// </summary>
@@ -249,6 +300,9 @@ public class WarriorPoseSolver : MonoBehaviour
         leftFootController.Reset();
         rightFootController.SetGroundY(groundY);
         rightFootController.Reset();
+
+        // Ensure legs point downward after reset
+        SolveLegOrientation();
     }
 
     /// <summary>

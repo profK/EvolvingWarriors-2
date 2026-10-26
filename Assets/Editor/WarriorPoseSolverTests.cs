@@ -57,7 +57,7 @@ public class WarriorPoseSolverTests
     WarriorPoseSolver poseSolver;
 
     [SetUp]
-    void SetUpWarriorHierarchy()
+    public void SetUpWarriorHierarchy()
     {
         // Create root warrior GameObject
         rootGO = new GameObject("TestWarrior");
@@ -145,7 +145,7 @@ public class WarriorPoseSolverTests
     }
 
     [TearDown]
-    void TearDownWarriorHierarchy()
+    public void TearDownWarriorHierarchy()
     {
         if (rootGO != null)
             Object.DestroyImmediate(rootGO);
@@ -291,5 +291,21 @@ public class WarriorPoseSolverTests
         Vector3 pos = leftFootCtrl.GetFootWorldPosition();
         Assert.AreEqual(0f, pos.y, 0.001f,
             "Foot Y should be at ground level after reset");
+    }
+
+    [Test]
+    public void TestFootControllerResetClampsFootToGroundY()
+    {
+        // Simulate T-position where foot bone starts at non-zero Y
+        // Move foot bone to y=0.5 (feet pointing sideways)
+        leftFootTfm.position = new Vector3(-0.1f, 0.5f, 0f);
+
+        // Reset should clamp Y to groundY=0
+        leftFootCtrl.Reset();
+
+        // Verify the captured position has Y clamped to groundY
+        Vector3 capturedPos = leftFootCtrl.GetFootWorldPosition();
+        Assert.AreEqual(0f, capturedPos.y, 0.001f,
+            "Foot Y should be clamped to groundY=0 after reset even when foot bone starts at y=0.5");
     }
 }

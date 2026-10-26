@@ -231,8 +231,11 @@ public class ProceduralFootController : MonoBehaviour
         if (footTransform == null)
             return;
 
-        // Capture current foot position and enter Planted state
-        currentFootPosition = footTransform.position;
+        // Capture current foot position and clamp Y to ground level
+        // This ensures feet are at groundY even if foot bone starts at non-zero Y (e.g., T-position)
+        Vector3 capturedPos = footTransform.position;
+        currentFootPosition = new Vector3(capturedPos.x, groundY, capturedPos.z);
+        
         plantedPosition = new Vector3(currentFootPosition.x, groundY, currentFootPosition.z);
         stepTargetXZ = plantedPosition; // Reset step target to avoid latent state inconsistency
         state = FootState.Planted;

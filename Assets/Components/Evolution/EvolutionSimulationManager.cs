@@ -86,11 +86,22 @@ public class EvolutionSimulationManager : MonoBehaviour
     /// <summary>Time remaining in the current round.</summary>
     public float TimeRemaining { get; private set; }
 
+    /// <summary>Number of warrior pairs in the population.</summary>
+    public int PairCount => pairCount;
+
+    /// <summary>Total number of warriors (pairCount × 2).</summary>
+    public int PopulationSize => pairCount * 2;
+
+    /// <summary>Whether the simulation is currently paused.</summary>
+    public bool IsPaused { get; private set; }
+
     // Internal state
     WarriorSpawner spawner;
     WarriorAgent[] population;
     System.Random rng;
     float roundTimer;
+    bool isPaused;
+    EvolutionCheckpointManager checkpointManager;
 
     void Awake()
     {
@@ -121,6 +132,9 @@ public class EvolutionSimulationManager : MonoBehaviour
             enabled = false;
             return;
         }
+
+        // Set up checkpoint manager (optional)
+        checkpointManager = GetComponent<EvolutionCheckpointManager>();
 
         // Configure spawner
         ConfigureSpawner();
@@ -267,7 +281,7 @@ public class EvolutionSimulationManager : MonoBehaviour
 
     void Update()
     {
-        if (State != SimulationState.Running)
+        if (State != SimulationState.Running || isPaused)
             return;
 
         // Countdown timer
@@ -279,6 +293,51 @@ public class EvolutionSimulationManager : MonoBehaviour
             TimeRemaining = 0f;
             StartCoroutine(EvaluateAndEvolve());
         }
+    }
+
+    /// <summary>
+    /// Pauses the simulation. Stops timer countdown, disables warrior inference,
+    /// and disables scoring. Round state is preserved.
+    /// </summary>
+    public void Pause()
+    {
+        if (isPaused) return;
+        isPaused = true;
+        IsPaused = true;
+
+        // Deactivate warriors so inference stops
+        DeactivateAll();
+        DisableScoring();
+
+        Debug.Log("Simulation paused.");
+    }
+
+    /// <summary>
+    /// Resumes the simulation from the paused state. Restores timer,
+    /// re-enables warrior inference and scoring.
+    /// </summary>
+    public void Resume()
+    {
+        if (!isPaused) return;
+        isPaused = false;
+        IsPaused = false;
+
+        // Re-activate warriors and scoring
+        ActivateAll();
+        EnableScoring();
+
+        Debug.Log("Simulation resumed.");
+    }
+
+    /// <summary>
+    /// Toggles the simulation pause state.
+    /// </summary>
+    public void TogglePause()
+    {
+        if (isPaused)
+            Resume();
+        else
+            Pause();
     }
 
     IEnumerator EvaluateAndEvolve()
@@ -304,6 +363,23 @@ public class EvolutionSimulationManager : MonoBehaviour
             }
         }
         Debug.Log($"Generation {Generation}: Best={bestScore}, Worst={worstScore}, Avg={totalScore / (float)population.Length:F1}");
+
+        // Find the best genome for checkpointing
+        WarriorAgent bestAgent = null;
+        foreach (WarriorAgent agent in population)
+        {
+            if (agent != null && agent.Score == bestScore)
+            {
+                bestAgent = agent;
+                break;
+            }
+        }
+
+        // Notify checkpoint manager
+        if (checkpointManager != null)
+        {
+            checkpointManager.OnGenerationComplete(Generation, bestScore, bestAgent?.Genome);
+        }
 
         // Run genetic evolution
         State = SimulationState.Evolving;

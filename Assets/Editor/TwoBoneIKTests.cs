@@ -18,7 +18,7 @@ public class TwoBoneIKTests
     float restLowerLegLen;
 
     [SetUp]
-    void SetUpHierarchy()
+    public void SetUpHierarchy()
     {
         rootGO = new GameObject("TestRoot");
         rootTfm = rootGO.transform;
@@ -53,7 +53,7 @@ public class TwoBoneIKTests
     }
 
     [TearDown]
-    void TearDownHierarchy()
+    public void TearDownHierarchy()
     {
         if (rootGO != null)
             Object.DestroyImmediate(rootGO);
@@ -66,9 +66,10 @@ public class TwoBoneIKTests
         // Target at (0, 0, 0.5) — distance from hip ≈ 1.39m in world space, but the solver
         // works in world space. Distance from hip to target is sqrt(0 + 1.3^2 + 0.5^2) ≈ 1.39m.
         // This is beyond maxReach (0.8m), so we need a closer target.
-        // Target at (0, 1.3, 0.6) — distance from hip = 0.6m, within 0.8m maxReach.
+        // Target at (0.01, 1.3, 0.6) — distance from hip ≈ 0.6m, within 0.8m maxReach.
+        // Small X offset (0.01) avoids degenerate case where dir is parallel to bendAxis.
         Vector3 hipPos = upperLegTfm.position;
-        Vector3 target = hipPos + new Vector3(0f, 0f, 0.6f);  // 0.6m forward from hip
+        Vector3 target = hipPos + new Vector3(0.01f, 0f, 0.6f);  // 0.6m forward from hip
         bool result = TwoBoneIK.Solve(target, rootTfm, upperLegTfm, lowerLegTfm, footTfm, 0f);
         Assert.IsTrue(result, "Solve should return true for a reachable target");
         Vector3 footWorldPos = footTfm.position;
@@ -80,8 +81,9 @@ public class TwoBoneIKTests
     [Test]
     public void TestBoneLengthPreservation()
     {
+        // Small X offset (0.01) avoids degenerate case where dir is parallel to bendAxis.
         Vector3 hipPos = upperLegTfm.position;
-        Vector3 target = hipPos + new Vector3(0f, 0f, 0.6f);  // 0.6m forward from hip, within reach
+        Vector3 target = hipPos + new Vector3(0.01f, 0f, 0.6f);  // 0.6m forward from hip, within reach
         bool result = TwoBoneIK.Solve(target, rootTfm, upperLegTfm, lowerLegTfm, footTfm, 0f);
         Assert.IsTrue(result, "Solve should succeed");
         float newUpperLegLen = (lowerLegTfm.position - upperLegTfm.position).magnitude;
@@ -100,8 +102,9 @@ public class TwoBoneIKTests
         // This WILL trigger the >160° clamp path in TwoBoneIK.Solve().
         // cosAngle = (0.09 + 0.0001 - 0.25) / (2 * 0.3 * 0.01) = -26.65 → clamped to -1.0
         // kneeAngle = acos(-1) = 180° > 160° → clamped to 160°
+        // Small X offset (0.01) avoids degenerate case where dir is parallel to bendAxis.
         Vector3 hipPos = upperLegTfm.position;
-        Vector3 target = hipPos + new Vector3(0f, 0f, 0.01f);
+        Vector3 target = hipPos + new Vector3(0.01f, 0f, 0.01f);
         bool result = TwoBoneIK.Solve(target, rootTfm, upperLegTfm, lowerLegTfm, footTfm, 0f);
 
         // The solver should succeed with the clamped angle
@@ -135,8 +138,9 @@ public class TwoBoneIKTests
     {
         // With unequal bone lengths (0.3/0.5), maxReach is ~0.8m.
         // Target at 1.5m from hip is clearly beyond reach.
+        // Small X offset (0.01) avoids degenerate case where dir is parallel to bendAxis.
         Vector3 hipPos = upperLegTfm.position;
-        Vector3 target = hipPos + new Vector3(0f, 0f, 1.5f);  // 1.5m forward from hip
+        Vector3 target = hipPos + new Vector3(0.01f, 0f, 1.5f);  // 1.5m forward from hip
         bool result = TwoBoneIK.Solve(target, rootTfm, upperLegTfm, lowerLegTfm, footTfm, 0f);
         Assert.IsTrue(result, "Solve should return true for beyond-reach targets (graceful degradation)");
         float maxReach = restUpperLegLen + restLowerLegLen;
@@ -170,13 +174,12 @@ public class TwoBoneIKTests
     public void TestGroundClamping()
     {
         // This test verifies BOTH ground clamping AND beyond-reach graceful degradation.
-        // hipPos is at (0, 1.3, 0). Target offset (0, -1.31, 0.1) gives world Y = -0.01,
-        // which is below groundY=0, forcing the clamp at TwoBoneIK.cs line 52-53 to execute.
-        // After the clamp, target.y becomes 0. The distance from hip is sqrt(1.31^2 + 0.1^2) ≈ 1.32m,
-        // which is beyond maxReach (0.8m), so the solver also scales to maxReach.
-        // This exercises both the ground clamping path and the beyond-reach path in one test.
+        // hipPos is at (0, 1.3, 0). Target offset (0.01, -1.31, 0.1) gives world Y = -0.01,
+        // which is below groundY=0, forcing the clamp to execute.
+        // After the clamp, target.y becomes 0. Distance from hip ≈ 1.32m, beyond maxReach (0.8m).
+        // Small X offset (0.01) avoids degenerate case where dir is parallel to bendAxis.
         Vector3 hipPos = upperLegTfm.position;
-        Vector3 target = hipPos + new Vector3(0f, -1.31f, 0.1f);  // World Y = -0.01, below ground
+        Vector3 target = hipPos + new Vector3(0.01f, -1.31f, 0.1f);  // World Y = -0.01, below ground
         float groundY = 0f;
         bool result = TwoBoneIK.Solve(target, rootTfm, upperLegTfm, lowerLegTfm, footTfm, groundY);
         Assert.IsTrue(result, "Solve should succeed with below-ground target (ground clamp + beyond-reach)");
@@ -192,4 +195,92 @@ public class TwoBoneIKTests
         bool result = TwoBoneIK.Solve(infTarget, rootTfm, upperLegTfm, lowerLegTfm, footTfm, 0f);
         Assert.IsFalse(result, "Solve should return false for Infinity inputs");
     }
+
+    [Test]
+    public void TestFootSoleFacesGround()
+    {
+        // The foot bone's local Y-axis (up) maps to the sole direction.
+        // After TwoBoneIK.Solve(), the foot rotation is set so the sole faces ground.
+        // TwoBoneIK projects the character forward onto the plane perpendicular to
+        // soleDir (always DOWN), then uses LookRotation(footForward, soleDir).
+        // Small X offset (0.01) avoids degenerate case where dir is parallel to bendAxis.
+        Vector3 hipPos = upperLegTfm.position;
+        Vector3 target = hipPos + new Vector3(0.01f, 0f, 0.6f);
+        bool result = TwoBoneIK.Solve(target, rootTfm, upperLegTfm, lowerLegTfm, footTfm, 0f);
+        Assert.IsTrue(result, "Solve should succeed for a reachable target");
+
+        // The foot's local Y-axis (up) should point DOWN in world space after IK
+        Vector3 soleWorldDir = footTfm.TransformDirection(Vector3.up);
+        float soleDotUp = Vector3.Dot(soleWorldDir, Vector3.up);
+        Assert.Less(soleDotUp, 0f,
+            $"Foot sole dot up = {soleDotUp:F3}. Expected negative (sole faces ground). " +
+            "Positive means sole faces sky (180 bug).");
+
+        // Foot forward should point roughly along character forward (+Z)
+        // The footForward vector is tilted to stay perpendicular to bendNormal, so its Z
+        // component is positive but may be < 0.5 for steep leg angles.
+        Vector3 footFwdWorld = footTfm.TransformDirection(Vector3.forward);
+        float fwdDotZ = Vector3.Dot(footFwdWorld.normalized, Vector3.forward);
+        Assert.Greater(fwdDotZ, 0f,
+            $"Foot forward dot Z = {fwdDotZ:F3}. Should be positive (foot faces forward).");
+    }
+
+    [Test]
+    public void TestFootSoleFacesGroundWithHumanoidRestPose()
+    {
+        // Simulates the actual character's foot bone rest pose where local Y points DOWN.
+        // In Kevin Iglesias' HumanCharacterDummy_M, the foot bone has local Y pointing DOWN
+        // through the sole (standard Unity humanoid convention).
+        // Set the foot's rest localRotation to match: Quaternion.Euler(180, 0, 0)
+        footTfm.localRotation = Quaternion.Euler(180f, 0f, 0f);
+
+        // Small X offset (0.01) avoids degenerate case where dir is parallel to bendAxis.
+        Vector3 hipPos = upperLegTfm.position;
+        Vector3 target = hipPos + new Vector3(0.01f, 0f, 0.6f);
+        bool result = TwoBoneIK.Solve(target, rootTfm, upperLegTfm, lowerLegTfm, footTfm, 0f);
+        Assert.IsTrue(result, "Solve should succeed with humanoid foot rest pose");
+
+        // After IK, the foot's local Y-axis still maps to the sole direction.
+        // TwoBoneIK sets foot.localRotation so that local Y maps to soleDir (always DOWN).
+        // The foot's rest rotation (180,0,0) is overwritten by the IK solution, so the
+        // sole direction after IK depends on the IK-computed rotation, not the rest pose.
+        Vector3 soleWorldDir = footTfm.TransformDirection(Vector3.up);
+        float soleDotUp = Vector3.Dot(soleWorldDir, Vector3.up);
+        Assert.Less(soleDotUp, 0f,
+            $"Foot sole dot up = {soleDotUp:F3}. Expected negative (sole faces ground) " +
+            "even with humanoid rest pose (180,0,0).");
+
+        // Verify foot forward points in a positive direction (roughly character forward)
+        Vector3 footFwdWorld = footTfm.TransformDirection(Vector3.forward);
+        float fwdDotZ = Vector3.Dot(footFwdWorld.normalized, Vector3.forward);
+        Assert.Greater(fwdDotZ, 0f,
+            $"Foot forward dot Z = {fwdDotZ:F3}. Should be positive (foot faces forward).");
+    }
+    [Test]
+    public void TestFootSoleFacesGroundBackwardTarget()
+    {
+        // When the foot target is behind the character, bendNormal points UP (Y positive).
+        // The fix signs bendNormal so soleDir always points DOWN, regardless of target direction.
+        // Small X offset (0.01) avoids degenerate case where dir is parallel to bendAxis.
+        // This ensures the sole faces ground even for backward foot placements.
+        Vector3 hipPos = upperLegTfm.position;
+        Vector3 target = hipPos + new Vector3(0.01f, -0.3f, -0.5f);  // Behind and below hip
+        bool result = TwoBoneIK.Solve(target, rootTfm, upperLegTfm, lowerLegTfm, footTfm, 0f);
+        Assert.IsTrue(result, "Solve should succeed for backward targets");
+
+        // Sole must still face ground for backward targets
+        Vector3 soleWorldDir = footTfm.TransformDirection(Vector3.up);
+        float soleDotUp = Vector3.Dot(soleWorldDir, Vector3.up);
+        Assert.Less(soleDotUp, 0f,
+            $"Foot sole dot up = {soleDotUp:F3} for backward target. Expected negative (sole faces ground)." + 
+            " Positive means sole faces sky.");
+
+        // Foot forward should still face character forward (+Z) even when placed behind
+        Vector3 footFwdWorld = footTfm.TransformDirection(Vector3.forward);
+        float fwdDotZ = Vector3.Dot(footFwdWorld.normalized, Vector3.forward);
+        Assert.Greater(fwdDotZ, 0f,
+            $"Foot forward dot Z = {fwdDotZ:F3} for backward target. Should be positive (foot faces forward)." + 
+            " Negative means foot faces backward.");
+    }
+
 }

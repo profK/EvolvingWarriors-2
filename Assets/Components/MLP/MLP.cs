@@ -98,7 +98,9 @@ public sealed class MLP
     public int[] LayerSizes => (int[])layerSizes.Clone();
 
     /// <summary>
-    /// Initializes all weights using Xavier/Glorot uniform initialization and zeros biases.
+    /// Initializes all weights and biases with symmetric uniform distribution in [-1, 1].
+    /// This ensures the expected weighted sum is near zero, promoting balanced activation
+    /// across neurons and preventing all warriors from moving in the same direction.
     /// </summary>
     public void InitializeRandom()
     {
@@ -110,17 +112,14 @@ public sealed class MLP
             int weightCount = layerWeightCounts[l];
             int biasCount = layerBiasCounts[l];
 
-            // Xavier uniform: scale = sqrt(6 / (fanIn + fanOut))
-            float scale = Mathf.Sqrt(6f / (fromSize + toSize));
-
+            // Symmetric initialization in [-1, 1] for both weights and biases
             for (int i = 0; i < weightCount; i++)
-                genome[offset + i] = (UnityEngine.Random.value * 2f - 1f) * scale;
+                genome[offset + i] = (UnityEngine.Random.value * 2f - 1f);
 
             offset += weightCount;
 
-            // Biases start at zero
             for (int i = 0; i < biasCount; i++)
-                genome[offset + i] = 0f;
+                genome[offset + i] = (UnityEngine.Random.value * 2f - 1f);
 
             offset += biasCount;
         }
