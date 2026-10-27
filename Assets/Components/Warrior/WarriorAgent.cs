@@ -116,6 +116,20 @@ public class WarriorAgent : MonoBehaviour
         // 4. Apply IK correction for foot grounding
         if (poseSolver != null)
             poseSolver.Solve();
+
+        // Keep leg bones locked in rest position after IK
+        if (boneController != null)
+        {
+            int[] locked = { 12, 13, 14, 15, 16, 17 };
+            foreach (int idx in locked)
+            {
+                if (boneController.GetBoneTransform(idx) != null)
+                {
+                    boneController.GetBoneTransform(idx).localRotation = boneController.GetRestRotation(idx);
+                    boneController.GetBoneTransform(idx).localPosition = boneController.GetRestPosition(idx);
+                }
+            }
+        }
     }
 
     /// <summary>

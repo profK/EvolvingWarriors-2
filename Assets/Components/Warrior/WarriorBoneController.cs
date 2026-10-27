@@ -130,6 +130,21 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
         }
 
         initialized = true;
+
+        // Calculate root rotation so feet rest at y=0 given current leg orientations
+        Transform leftFoot = boneTransforms.Length > 16 ? boneTransforms[16] : null;
+        if (leftFoot != null)
+        {
+            Vector3 footWorld = leftFoot.position;
+            float dx = footWorld.x - transform.position.x;
+            float dz = footWorld.z - transform.position.z;
+            float distXZ = Mathf.Sqrt(dx*dx + dz*dz);
+            if (distXZ > 0.001f)
+            {
+                float angleRad = Mathf.Atan2(footWorld.y - 0f, distXZ);
+                transform.rotation = Quaternion.Euler(-angleRad * Mathf.Rad2Deg, 0f, 0f) * transform.rotation;
+            }
+        }
     }
 
     public bool IsInitialized => initialized;
@@ -161,8 +176,8 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
             Transform bone = boneTransforms[i];
             if (bone == null) continue;
 
-            // Lock b-thigh.l / b-thigh.r and all bones beneath them (leg chain 12-17)
-            if (i >= 12 && i <= 17)
+            // Lock hips (0) and both leg chains (12-17); only update spine-down (1-11)
+            if (i == 0 || (i >= 12 && i <= 17))
             {
                 bone.localRotation = restLocalRotations[i];
                 bone.localPosition = restLocalPositions[i];
