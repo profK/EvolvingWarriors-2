@@ -125,6 +125,11 @@ public class WarriorPoseSolver : MonoBehaviour
         if (!initialized)
             return;
 
+        // Do not run IK while paused (e.g., during reset)
+        var sim = FindObjectOfType<EvolutionSimulationManager>();
+        if (sim != null && sim.IsPaused)
+            return;
+
         // 1. Get hip transform (CoM proxy)
         Transform hips = boneController.GetBoneTransform(Hips);
         if (hips == null)

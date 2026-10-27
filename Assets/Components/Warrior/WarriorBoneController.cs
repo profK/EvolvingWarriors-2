@@ -107,6 +107,28 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
         }
         if (foundCount < ControlledBones.Length)
             Debug.LogWarning($"WarriorBoneController: Only {foundCount}/{ControlledBones.Length} bones resolved.");
+
+        // Correct leg bones from X-parallel to Y-parallel with feet downward (parallel to Y axis)
+        int[] legBoneIndices = { 12, 13, 14, 15 };
+        foreach (int idx in legBoneIndices)
+        {
+            if (boneTransforms[idx] != null)
+            {
+                restLocalRotations[idx] = Quaternion.Euler(0f, 0f, 0f) * restLocalRotations[idx];
+                targetLocalRotations[idx] = restLocalRotations[idx];
+            }
+        }
+
+        // Fix hip rest position to sit centered above feet (index 0 = Hips)
+        if (boneTransforms[0] != null)
+        {
+            Vector3 hipsPos = restLocalPositions[0];
+            hipsPos.x = 0f;
+            hipsPos.z = 0f;
+            hipsPos.y = 1.0f; // Hips 1 units above feet plane
+            restLocalPositions[0] = hipsPos;
+        }
+
         initialized = true;
     }
 
@@ -138,6 +160,16 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
         {
             Transform bone = boneTransforms[i];
             if (bone == null) continue;
+
+            // Lock b-thigh.l / b-thigh.r and all bones beneath them (leg chain 12-17)
+            if (i >= 12 && i <= 17)
+            {
+                bone.localRotation = restLocalRotations[i];
+                bone.localPosition = restLocalPositions[i];
+                bone.localScale = restLocalScales[i];
+                targetLocalRotations[i] = restLocalRotations[i];
+                continue;
+            }
 
             int idx = i * OutputsPerBone;
             float ox = Guard(outputs[idx]);
@@ -178,6 +210,18 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
             bone.localPosition = restLocalPositions[i];
             bone.localScale = restLocalScales[i];
             targetLocalRotations[i] = restLocalRotations[i];
+        }
+
+        // Align thighs with shins so knees are straight in rest pose
+        int[] thighIndices = { 12, 13 };
+        int[] shinIndices = { 14, 15 };
+        for (int i = 0; i < thighIndices.Length; i++)
+        {
+            if (boneTransforms[thighIndices[i]] != null && boneTransforms[shinIndices[i]] != null)
+            {
+                boneTransforms[shinIndices[i]].localRotation = restLocalRotations[thighIndices[i]];
+                targetLocalRotations[shinIndices[i]] = restLocalRotations[thighIndices[i]];
+            }
         }
 
         // Also restore the root position to spawn location after reset.

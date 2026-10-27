@@ -58,6 +58,9 @@ public class EvolutionHUD : MonoBehaviour
     [Tooltip("Text on the pause button.")]
     [SerializeField] internal TextMeshProUGUI pauseButtonText;
 
+    [Tooltip("Reset button to restore warrior to rest pose.")]
+    [SerializeField] internal Button resetButton;
+
     // Previous generation stats
     int prevGeneration;
     int prevBestScore;
@@ -87,6 +90,23 @@ public class EvolutionHUD : MonoBehaviour
             {
                 simulationManager.TogglePause();
                 UpdatePauseButtonText();
+                // Directly freeze/unfreeze all warrior agents so pause stops motion
+                foreach (var agent in FindObjectsOfType<WarriorAgent>())
+                {
+                    if (simulationManager.IsPaused)
+                        agent.Deactivate();
+                    else
+                        agent.Activate();
+                }
+            });
+        }
+
+        if (resetButton != null)
+        {
+            resetButton.onClick.AddListener(() =>
+            {
+                foreach (var wbc in FindObjectsOfType<WarriorBoneController>())
+                    wbc.ResetToRestPose();
             });
         }
 
@@ -104,8 +124,40 @@ public class EvolutionHUD : MonoBehaviour
         UpdatePauseButtonText();
     }
 
+    public void PauseClicked()
+    {
+        simulationManager?.TogglePause();
+        UpdatePauseButtonText();
+        foreach (var agent in FindObjectsOfType<WarriorAgent>())
+        {
+            if (simulationManager != null && simulationManager.IsPaused)
+                agent.Deactivate();
+            else
+                agent.Activate();
+        }
+    }
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            simulationManager?.TogglePause();
+            UpdatePauseButtonText();
+            foreach (var agent in FindObjectsOfType<WarriorAgent>())
+            {
+                if (simulationManager != null && simulationManager.IsPaused)
+                    agent.Deactivate();
+                else
+                    agent.Activate();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            foreach (var wbc in FindObjectsOfType<WarriorBoneController>())
+                wbc.ResetToRestPose();
+        }
+
         if (simulationManager == null) return;
 
         // Update generation
