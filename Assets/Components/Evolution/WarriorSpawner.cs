@@ -79,11 +79,11 @@ public class WarriorSpawner : MonoBehaviour
 
                 // Warrior A: offset -Z/2, facing +Z (toward opponent)
                 Vector3 posA = centerPos + Vector3.forward * (pairSeparation * 0.5f);
-                Quaternion rotA = Quaternion.LookRotation(Vector3.right); // Face right (90° Y rotation)
+                Quaternion rotA = Quaternion.LookRotation(-Vector3.forward); // Face right (90° Y rotation)
 
                 // Warrior B: offset +Z/2, facing -Z (toward opponent)
                 Vector3 posB = centerPos - Vector3.forward * (pairSeparation * 0.5f);
-                Quaternion rotB = Quaternion.LookRotation(-Vector3.right); // Face left (270° Y rotation)
+                Quaternion rotB = Quaternion.LookRotation(Vector3.forward); // Face left (270° Y rotation)
 
                 // Instantiate warrior A
                 GameObject warriorA = Instantiate(warriorPrefab, posA, rotA);

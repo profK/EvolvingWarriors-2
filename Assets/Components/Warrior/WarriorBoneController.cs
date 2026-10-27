@@ -226,12 +226,14 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
             bone.localScale = restLocalScales[i];
             targetLocalRotations[i] = restLocalRotations[i];
         }
-
+        
         // Keep knees at captured rest bend (do not override with thigh rotation)
         // (Previously copied thigh rot to shin; removed so shins keep their rest pose.)
 
         // Also restore the root position to spawn location after reset.
         transform.position = spawnPosition;
+        Quaternion localYRotation = Quaternion.AngleAxis(90, transform.up);
+        transform.rotation = localYRotation * transform.rotation;
     }
 
     /// <summary>
