@@ -212,17 +212,8 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
             targetLocalRotations[i] = restLocalRotations[i];
         }
 
-        // Align thighs with shins so knees are straight in rest pose
-        int[] thighIndices = { 12, 13 };
-        int[] shinIndices = { 14, 15 };
-        for (int i = 0; i < thighIndices.Length; i++)
-        {
-            if (boneTransforms[thighIndices[i]] != null && boneTransforms[shinIndices[i]] != null)
-            {
-                boneTransforms[shinIndices[i]].localRotation = restLocalRotations[thighIndices[i]];
-                targetLocalRotations[shinIndices[i]] = restLocalRotations[thighIndices[i]];
-            }
-        }
+        // Keep knees at captured rest bend (do not override with thigh rotation)
+        // (Previously copied thigh rot to shin; removed so shins keep their rest pose.)
 
         // Also restore the root position to spawn location after reset.
         transform.position = spawnPosition;
