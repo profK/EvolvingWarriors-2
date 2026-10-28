@@ -18,7 +18,7 @@ public class WarriorSpawner : MonoBehaviour
 
     [Header("Layout")]
     [Tooltip("Number of warrior pairs to spawn (total warriors = pairs × 2).")]
-    [SerializeField] int pairCount = 4;
+    [SerializeField] int pairCount=10;
     public int PairCount { get => pairCount; set => pairCount = value; }
 
     [Tooltip("Distance between the two warriors in each pair. Default 1.5m (approximate sword reach).")]

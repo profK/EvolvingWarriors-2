@@ -572,13 +572,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EvolutionHUD
   simulationManager: {fileID: 1773197141}
   generationText: {fileID: 745800171}
+  bestScoreText: {fileID: 0}
+  averageScoreText: {fileID: 0}
   timeRemainingText: {fileID: 1918191480}
   stateText: {fileID: 1946537447}
   pairsText: {fileID: 0}
   populationText: {fileID: 0}
-  bestScoreText: {fileID: 0}
   worstScoreText: {fileID: 0}
-  averageScoreText: {fileID: 0}
   previousGenText: {fileID: 0}
   pauseButton: {fileID: 1235447810}
   pauseButtonText: {fileID: 1261346518}
@@ -1958,7 +1958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WarriorSpawner
   warriorPrefab: {fileID: 6508550611535698564, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
-  pairCount: 4
+  pairCount: 10
   pairSeparation: 1.5
   interPairDistance: 6
 --- !u!114 &1773197141
