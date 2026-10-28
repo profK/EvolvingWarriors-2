@@ -121,6 +121,7 @@ public class EvolutionSimulationManager : MonoBehaviour
 
     // Internal state
     WarriorSpawner spawner;
+    internal WarriorSpawner Spawner => spawner;
     WarriorAgent[] population;
     System.Random rng;
     float roundTimer;
