@@ -73,7 +73,6 @@ public class EvolutionHUD : MonoBehaviour
 
     // Cached score stats shared between Update() and UpdateScoreStats()
     int cachedBest;
-    int cachedWorst;
     float cachedAverage;
     bool hasCachedStats;
 
@@ -266,7 +265,6 @@ public class EvolutionHUD : MonoBehaviour
         if (count == 0) return;
 
         cachedBest = best;
-        cachedWorst = worst;
         cachedAverage = total / (float)count;
         hasCachedStats = true;
 

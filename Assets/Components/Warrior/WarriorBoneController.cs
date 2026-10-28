@@ -232,8 +232,8 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
 
         // Also restore the root position to spawn location after reset.
         transform.position = spawnPosition;
-        Quaternion localYRotation = Quaternion.AngleAxis(90, transform.up);
-        transform.rotation = localYRotation * transform.rotation;
+        //Quaternion localYRotation = Quaternion.AngleAxis(90, transform.up);
+        //transform.rotation = localYRotation * transform.rotation;
     }
 
     /// <summary>
