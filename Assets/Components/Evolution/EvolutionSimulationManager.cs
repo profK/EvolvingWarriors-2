@@ -3,6 +3,23 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
+/// Strategy for selecting parents during genetic evolution.
+/// </summary>
+public enum SelectionMethod
+{
+    /// <summary>
+    /// Tournament selection: sample N individuals at random, pick the best.
+    /// </summary>
+    Tournament,
+
+    /// <summary>
+    /// Roulette wheel (weighted random): probability proportional to fitness.
+    /// Better-scoring individuals have a larger slice of the wheel.
+    /// </summary>
+    RouletteWheel
+}
+
+/// <summary>
 /// Central state machine for the training simulation.
 /// 
 /// Lifecycle: Initializing → Running → Evaluating → Evolving → Resetting → (loop back to Running)
@@ -48,11 +65,14 @@ public class EvolutionSimulationManager : MonoBehaviour
     [SerializeField] long randomSeed = -1L;
 
     [Header("Genetic Algorithm")]
+    [Tooltip("Strategy for selecting parents during evolution.")]
+    [SerializeField] SelectionMethod selectionMethod = SelectionMethod.Tournament;
+
     [Tooltip("Fraction of top performers preserved unchanged (0.0–1.0).")]
     [Range(0f, 1f)]
     [SerializeField] float eliteFraction = 0.10f;
 
-    [Tooltip("Number of individuals sampled per tournament selection.")]
+    [Tooltip("Number of individuals sampled per tournament selection (used when selectionMethod is Tournament).")]
     [Range(2, 10)]
     [SerializeField] int tournamentSize = 3;
 
