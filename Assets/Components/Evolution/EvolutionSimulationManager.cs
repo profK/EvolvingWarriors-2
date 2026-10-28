@@ -88,6 +88,10 @@ public class EvolutionSimulationManager : MonoBehaviour
     [Range(0.01f, 1f)]
     [SerializeField] float mutationStrength = 0.10f;
 
+    [Header("Scoring")]
+    [Tooltip("Shared scoring rules asset. Configures self-hit, damage-hit, and shield-hit scores.")]
+    [SerializeField] ScoringRules scoringRules;
+
     [Header("Network")]
     [Tooltip("Number of hidden layers.")]
     [Range(1, 4)]
@@ -281,7 +285,10 @@ public class EvolutionSimulationManager : MonoBehaviour
             {
                 var scorer = agent.GetComponent<WarriorCombatScorer>();
                 if (scorer != null)
+                {
+                    scorer.Rules = scoringRules;
                     scorer.EnableScoring();
+                }
             }
         }
     }

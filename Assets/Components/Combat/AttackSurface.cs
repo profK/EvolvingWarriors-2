@@ -35,20 +35,49 @@ public class AttackSurface : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (ownerAgent == null) return;
+
+        WarriorCombatScorer scorer = ownerAgent.GetComponent<WarriorCombatScorer>();
+        if (scorer == null) return;
+
+        // Check for damage surface
         DamageSurface damageSurface = other.GetComponent<DamageSurface>();
-        if (damageSurface != null && ownerAgent != null)
+        if (damageSurface != null)
         {
-            ownerAgent.GetComponent<WarriorCombatScorer>()?.OnContactBegin(
-                damageSurface.SurfaceId, damageSurface.OwnerAgent);
+            scorer.OnContactBegin(damageSurface.SurfaceId, damageSurface.OwnerAgent);
+            return;
+        }
+
+        // Check for shield surface (separate from damage)
+        ShieldSurface shieldSurface = other.GetComponent<ShieldSurface>();
+        if (shieldSurface != null)
+        {
+            scorer.OnShieldContactBegin(shieldSurface.SurfaceId, shieldSurface.OwnerAgent);
+            return;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
+        if (ownerAgent == null) return;
+
+        WarriorCombatScorer scorer = ownerAgent.GetComponent<WarriorCombatScorer>();
+        if (scorer == null) return;
+
+        // Check for damage surface
         DamageSurface damageSurface = other.GetComponent<DamageSurface>();
-        if (damageSurface != null && ownerAgent != null)
+        if (damageSurface != null)
         {
-            ownerAgent.GetComponent<WarriorCombatScorer>()?.OnContactEnd(damageSurface.SurfaceId);
+            scorer.OnContactEnd(damageSurface.SurfaceId);
+            return;
+        }
+
+        // Check for shield surface (separate from damage)
+        ShieldSurface shieldSurface = other.GetComponent<ShieldSurface>();
+        if (shieldSurface != null)
+        {
+            scorer.OnShieldContactEnd(shieldSurface.SurfaceId);
+            return;
         }
     }
 }
