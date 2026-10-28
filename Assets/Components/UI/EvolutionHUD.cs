@@ -6,8 +6,8 @@ using UnityEngine.UI;
 /// <summary>
 /// Runtime HUD that displays evolution training statistics.
 /// 
-/// Top-center: generation number, round time remaining, simulation state
-/// Mid-screen compact: pair count, population, highest/lowest/average score
+/// Top-center: generation number, highest score, average score, time remaining, simulation state
+/// Mid-screen compact: pair count, population, lowest score
 /// Previous generation statistics display (after generation completes)
 /// Pause/Resume button
 /// 
@@ -22,8 +22,14 @@ public class EvolutionHUD : MonoBehaviour
     [SerializeField] internal EvolutionSimulationManager simulationManager;
 
     [Header("Top Bar")]
-    [Tooltip("Displays: Generation N")]
+    [Tooltip("Displays: Gen N | Best: X | Avg: Y.Y")]
     [SerializeField] internal TextMeshProUGUI generationText;
+
+    [Tooltip("Displays: Best Score: N (used in top bar)")]
+    [SerializeField] internal TextMeshProUGUI bestScoreText;
+
+    [Tooltip("Displays: Average Score: X.X (used in top bar)")]
+    [SerializeField] internal TextMeshProUGUI averageScoreText;
 
     [Tooltip("Displays: Time Remaining: X.Xs")]
     [SerializeField] internal TextMeshProUGUI timeRemainingText;
@@ -38,14 +44,8 @@ public class EvolutionHUD : MonoBehaviour
     [Tooltip("Displays: Population: N")]
     [SerializeField] internal TextMeshProUGUI populationText;
 
-    [Tooltip("Displays: Best Score: N")]
-    [SerializeField] internal TextMeshProUGUI bestScoreText;
-
     [Tooltip("Displays: Worst Score: N")]
     [SerializeField] internal TextMeshProUGUI worstScoreText;
-
-    [Tooltip("Displays: Average Score: X.X")]
-    [SerializeField] internal TextMeshProUGUI averageScoreText;
 
     [Header("Previous Generation")]
     [Tooltip("Displays previous generation stats after evolution completes.")]
@@ -70,6 +70,12 @@ public class EvolutionHUD : MonoBehaviour
 
     // Cached population reference to avoid repeated GetComponent calls
     WarriorAgent[] cachedPopulation;
+
+    // Cached score stats shared between Update() and UpdateScoreStats()
+    int cachedBest;
+    int cachedWorst;
+    float cachedAverage;
+    bool hasCachedStats;
 
     void Start()
     {
@@ -160,9 +166,38 @@ public class EvolutionHUD : MonoBehaviour
 
         if (simulationManager == null) return;
 
-        // Update generation
+        // Update live scores FIRST during running/evaluating states so cached values are current
+        if (simulationManager.State == SimulationState.Running ||
+            simulationManager.State == SimulationState.Evaluating)
+        {
+            UpdateScoreStats();
+        }
+
+        // Update generation and scores in top bar (uses up-to-date cached values)
         if (generationText != null)
-            generationText.text = $"Generation: {simulationManager.Generation}";
+        {
+            if (hasCachedStats)
+                generationText.text = $"Gen {simulationManager.Generation} | Best: {cachedBest} | Avg: {cachedAverage:F1}";
+            else
+                generationText.text = $"Generation: {simulationManager.Generation}";
+        }
+
+        // Update best and average score text fields using the same cached values
+        if (bestScoreText != null)
+        {
+            if (hasCachedStats)
+                bestScoreText.text = $"Best Score: {cachedBest}";
+            else
+                bestScoreText.text = "Best Score: --";
+        }
+
+        if (averageScoreText != null)
+        {
+            if (hasCachedStats)
+                averageScoreText.text = $"Average Score: {cachedAverage:F1}";
+            else
+                averageScoreText.text = "Average Score: --";
+        }
 
         // Update time remaining
         if (timeRemainingText != null)
@@ -178,13 +213,6 @@ public class EvolutionHUD : MonoBehaviour
         {
             string stateStr = simulationManager.IsPaused ? "Paused" : simulationManager.State.ToString();
             stateText.text = $"State: {stateStr}";
-        }
-
-        // Update live scores during running/evaluating states
-        if (simulationManager.State == SimulationState.Running ||
-            simulationManager.State == SimulationState.Evaluating)
-        {
-            UpdateScoreStats();
         }
 
         // Clear previous gen display when a new round starts running
@@ -237,14 +265,14 @@ public class EvolutionHUD : MonoBehaviour
 
         if (count == 0) return;
 
-        if (bestScoreText != null)
-            bestScoreText.text = $"Best: {best}";
+        cachedBest = best;
+        cachedWorst = worst;
+        cachedAverage = total / (float)count;
+        hasCachedStats = true;
 
+        // Update mid-screen worst score (best and average are displayed in top bar via Update())
         if (worstScoreText != null)
             worstScoreText.text = $"Worst: {worst}";
-
-        if (averageScoreText != null)
-            averageScoreText.text = $"Average: {total / (float)count:F1}";
 
         // Store current stats as "previous" when evolution completes
         if (simulationManager.State == SimulationState.Evaluating)
