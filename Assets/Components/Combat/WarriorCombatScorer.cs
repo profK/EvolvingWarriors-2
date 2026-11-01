@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 /// <summary>
@@ -59,13 +60,22 @@ public class WarriorCombatScorer : MonoBehaviour
         if (owner == Agent)
         {
             // Self-inflicted contact
+            StringBuilder logstr = new StringBuilder("Sword Self hit: ");
+            logstr.Append("Warrior=").Append(Agent);
+            logstr.Append(" Prescore=").Append(Agent.Score);
             Agent.AddScore(Rules?.SelfHitScore ?? -1);
+            logstr.Append(" Postscore=").Append(Agent.Score);
+            Debug.Log(logstr);
         }
         else if (owner == Agent.Opponent)
         {
             // Valid attack on opponent's damage surface — score for both sides
+            StringBuilder logstr = new StringBuilder("Sword opponent hit: ");
+            logstr.Append("Warrior=").Append(Agent);
+            logstr.Append(" Prescore=").Append(Agent.Score);
             Agent.AddScore(Rules?.DamageHitAttackerScore ?? 1);
-            owner.AddScore(Rules?.DamageHitDefenderScore ?? 0);
+            logstr.Append(" Postscore=").Append(Agent.Score);
+            Debug.Log(logstr);
         }
         // Contact with unrelated warrior — no scoring
     }
@@ -95,13 +105,23 @@ public class WarriorCombatScorer : MonoBehaviour
         if (owner == Agent)
         {
             // Hitting own shield — treat as self-hit
+            StringBuilder logstr = new StringBuilder("Shield self hit: ");
+            logstr.Append("Warrior=").Append(Agent);
+            logstr.Append(" Prescore=").Append(Agent.Score);
             Agent.AddScore(Rules?.SelfHitScore ?? -1);
+            logstr.Append(" Postscore=").Append(Agent.Score);
+            Debug.Log(logstr);
+            
         }
         else if (owner == Agent.Opponent)
         {
-            // Hit opponent's shield — score for both sides
-            Agent.AddScore(Rules?.ShieldHitAttackerScore ?? 0);
+            // Hit opponent's shield — score for defender
+            StringBuilder logstr = new StringBuilder("Shield other hit: ");
+            logstr.Append("Warrior=").Append(Agent.Opponent);
+            logstr.Append(" Prescore=").Append(Agent.Opponent.Score);
             owner.AddScore(Rules?.ShieldHitDefenderScore ?? 1);
+            logstr.Append(" Postscore=").Append(Agent.Score);
+            Debug.Log(logstr);
         }
         // Contact with unrelated warrior — no scoring
     }

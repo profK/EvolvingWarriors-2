@@ -347,7 +347,8 @@ public class PiPCameraController : MonoBehaviour
         Vector3 direction = CalculateCameraDirection();
 
         // Target position and look-at
-        Vector3 newPos = midpoint - direction * distance;
+        Vector3 newPos = (midpoint - direction * distance)+
+                         new Vector3(0,5,0);
         Vector3 newLook = midpoint;
 
         // Apply transition or direct
@@ -460,7 +461,7 @@ public class PiPCameraController : MonoBehaviour
         // If the camera hasn't moved yet, use a sensible default start position
         if (transitionStartPosition == Vector3.zero)
         {
-            Vector3 defaultMid = Vector3.zero;
+            Vector3 defaultMid = new Vector3(0f, 20f, 0f);
             Vector3 dir = CalculateCameraDirection();
             transitionStartPosition = defaultMid - dir * 8f;
             transitionStartLookAt = defaultMid;

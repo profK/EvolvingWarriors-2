@@ -2160,7 +2160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EvolutionSimulationManager
   warriorPrefab: {fileID: 6508550611535698564, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
-  pairCount: 4
+  pairCount: 10
   pairSeparation: 1.5
   interPairDistance: 6
   roundDuration: 30
@@ -3112,7 +3112,7 @@ Transform:
   m_GameObject: {fileID: 2106149335}
   serializedVersion: 2
   m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 8, z: -8}
+  m_LocalPosition: {x: 0, y: 10, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
