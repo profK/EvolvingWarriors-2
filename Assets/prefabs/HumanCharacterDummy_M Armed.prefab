@@ -13,18 +13,6 @@ PrefabInstance:
       value: Shield002
       objectReference: {fileID: 0}
     - target: {fileID: 430558, guid: 8e0eb5044cf97488987c2a8016e4776b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 430558, guid: 8e0eb5044cf97488987c2a8016e4776b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 430558, guid: 8e0eb5044cf97488987c2a8016e4776b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 430558, guid: 8e0eb5044cf97488987c2a8016e4776b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.014
       objectReference: {fileID: 0}
@@ -217,9 +205,17 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 145208, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
       insertIndex: -1
-      addedComponent: {fileID: 8567123456789012345}
+      addedObject: {fileID: 8567123456789012345}
+    - targetCorrespondingSourceObject: {fileID: 145208, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8567123456789012346}
   m_SourcePrefab: {fileID: 100100000, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
---- !u!1 &9000000000000000000 stripped
+--- !u!4 &7400125921520829727 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 410394, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
+  m_PrefabInstance: {fileID: 7400125921521206789}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7400125921521086781 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 145208, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
   m_PrefabInstance: {fileID: 7400125921521206789}
@@ -228,9 +224,9 @@ GameObject:
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 7400125921521206789}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9000000000000000000}
+  m_GameObject: {fileID: 7400125921521086781}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -244,24 +240,19 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.05
-  m_Height: 1.0
+  m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0.35}
 --- !u!114 &8567123456789012346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 7400125921521206789}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9000000000000000000}
+  m_GameObject: {fileID: 7400125921521086781}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76d785279a0234218b16ff2354eec4b6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   surfaceId: sword
---- !u!4 &7400125921520829727 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 410394, guid: b8c5caa99f8fb4e259033573bdc71acf, type: 3}
-  m_PrefabInstance: {fileID: 7400125921521206789}
-  m_PrefabAsset: {fileID: 0}
