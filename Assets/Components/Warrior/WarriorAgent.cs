@@ -20,8 +20,14 @@ public class WarriorAgent : MonoBehaviour
     [SerializeField] WarriorAgent opponent;
 
     [Header("Components")]
+    [Tooltip("Control mode for this warrior.")]
+    [SerializeField] WarriorControlMode controlMode = WarriorControlMode.DirectBoneControl;
+
     [Tooltip("Bone rotation controller.")]
     [SerializeField] WarriorBoneController boneController;
+
+    [Tooltip("Hand IK adapter (used when controlMode is HandIKControl).")]
+    [SerializeField] IKWarriorMLPAdapter handIKAdapter;
 
     [Tooltip("Observation encoder.")]
     [SerializeField] WarriorObservationEncoder observationEncoder;
@@ -31,6 +37,13 @@ public class WarriorAgent : MonoBehaviour
 
     [Tooltip("Pose solver for foot IK and grounding.")]
     [SerializeField] WarriorPoseSolver poseSolver;
+
+    /// <summary>Control mode of this warrior.</summary>
+    public WarriorControlMode ControlMode
+    {
+        get => controlMode;
+        set => controlMode = value;
+    }
 
     /// <summary>The warrior's current score for this round.</summary>
     public int Score { get; private set; }
@@ -65,16 +78,24 @@ public class WarriorAgent : MonoBehaviour
         // Auto-resolve component references
         if (boneController == null)
             boneController = GetComponent<WarriorBoneController>();
+        if (handIKAdapter == null)
+            handIKAdapter = GetComponent<IKWarriorMLPAdapter>();
         if (observationEncoder == null)
             observationEncoder = GetComponent<WarriorObservationEncoder>();
         if (combatScorer == null)
             combatScorer = GetComponent<WarriorCombatScorer>();
 
+        // Auto-detect control mode if handIKAdapter is present and boneController is absent or explicitly IK
+        if (controlMode == WarriorControlMode.HandIKControl || (handIKAdapter != null && boneController == null))
+        {
+            controlMode = WarriorControlMode.HandIKControl;
+        }
+
         // Create MLP if not assigned
         if (neuralNetwork == null)
         {
             int inputDim = observationEncoder != null ? observationEncoder.InputDimension : 216;
-            int outputDim = WarriorBoneController.OutputDimension;
+            int outputDim = (controlMode == WarriorControlMode.HandIKControl) ? IKWarriorMLPAdapter.OutputDimension : WarriorBoneController.OutputDimension;
             neuralNetwork = new MLP(inputDim, new int[] { 128, 64 }, outputDim);
         }
 
@@ -110,8 +131,15 @@ public class WarriorAgent : MonoBehaviour
         // 2. Run MLP inference
         neuralNetwork.Forward(inputBuffer, outputBuffer);
 
-        // 3. Apply bone rotations
-        boneController.ApplyOutputs(outputBuffer);
+        // 3. Apply outputs according to control mode
+        if (controlMode == WarriorControlMode.HandIKControl && handIKAdapter != null)
+        {
+            handIKAdapter.ApplyOutputs(outputBuffer);
+        }
+        else if (boneController != null)
+        {
+            boneController.ApplyOutputs(outputBuffer);
+        }
 
         // 4. Apply IK correction for foot grounding
         if (poseSolver != null)
@@ -168,6 +196,10 @@ public class WarriorAgent : MonoBehaviour
     public void InstallGenome(Genome newGenome)
     {
         if (newGenome == null) throw new System.ArgumentNullException(nameof(newGenome));
+        if (neuralNetwork != null && newGenome.Size != neuralNetwork.GenomeSize)
+        {
+            throw new System.ArgumentException($"Genome size {newGenome.Size} does not match network genome size {neuralNetwork.GenomeSize}.", nameof(newGenome));
+        }
         genome = newGenome;
         neuralNetwork.ImportGenome(newGenome.ToArray());
     }
