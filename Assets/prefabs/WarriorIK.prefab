@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1941775706152013881
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1039885404981888867, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: controlMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.46548
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.35544
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.42346
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5843654578163990590, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508550611535698564, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      propertyPath: m_Name
+      value: WarriorIK
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6508550611535698564, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 840324699486152057}
+    - targetCorrespondingSourceObject: {fileID: 6508550611535698564, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1220229485890519102}
+  m_SourcePrefab: {fileID: 100100000, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+--- !u!1 &4657169496028482237 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6508550611535698564, guid: 9fb3441b84ac943b2b7a595ffbaf0194, type: 3}
+  m_PrefabInstance: {fileID: 1941775706152013881}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &840324699486152057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4657169496028482237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d1cc99e8b14cb999bcd9c5dc822958, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarriorHandIKController
+  modelRoot: {fileID: 0}
+  rightShoulder: {fileID: 0}
+  rightElbow: {fileID: 0}
+  rightHand: {fileID: 0}
+  leftShoulder: {fileID: 0}
+  leftElbow: {fileID: 0}
+  leftHand: {fileID: 0}
+  rightWeight: 1
+  leftWeight: 1
+  rightLimits:
+    minRadius: 0.2
+    maxRadius: 1.2
+    minAzimuthRad: -1.5707964
+    maxAzimuthRad: 2.3561945
+    minElevationRad: -1.0995574
+    maxElevationRad: 1.4137167
+    reachTolerance: 0.05
+  leftLimits:
+    minRadius: 0.2
+    maxRadius: 1.2
+    minAzimuthRad: -2.3561945
+    maxAzimuthRad: 1.5707964
+    minElevationRad: -1.0995574
+    maxElevationRad: 1.4137167
+    reachTolerance: 0.05
+  showDebugGizmos: 1
+--- !u!114 &1220229485890519102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4657169496028482237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a387686130b46f5b7e07e6a1a3a0776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IKWarriorMLPAdapter
+  handIKController: {fileID: 0}

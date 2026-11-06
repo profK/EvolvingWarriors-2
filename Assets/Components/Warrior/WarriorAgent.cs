@@ -85,16 +85,24 @@ public class WarriorAgent : MonoBehaviour
         if (combatScorer == null)
             combatScorer = GetComponent<WarriorCombatScorer>();
 
-        // Auto-detect control mode if handIKAdapter is present and boneController is absent or explicitly IK
+        // Auto-detect control mode: if explicitly set to HandIKControl, or if
+        // IK adapter is present without a bone controller (fallback for manual setup).
+        // When both bone controller and IK adapter are present (as on the IK prefab),
+        // the explicitly serialized controlMode determines the mode.
         if (controlMode == WarriorControlMode.HandIKControl || (handIKAdapter != null && boneController == null))
         {
             controlMode = WarriorControlMode.HandIKControl;
         }
 
+        // Tell the bone controller to skip hips/leg position locks in IK mode.
+        // The pose solver has full authority over those bones.
+        if (boneController != null)
+            boneController.IKMode = (controlMode == WarriorControlMode.HandIKControl);
+
         // Create MLP if not assigned
         if (neuralNetwork == null)
         {
-            int inputDim = observationEncoder != null ? observationEncoder.InputDimension : 216;
+            int inputDim = observationEncoder != null ? observationEncoder.InputDimension : WarriorBoneController.BoneCount * 7 + 7 + WarriorBoneController.BoneCount * 4 + 8;
             int outputDim = (controlMode == WarriorControlMode.HandIKControl) ? IKWarriorMLPAdapter.OutputDimension : WarriorBoneController.OutputDimension;
             neuralNetwork = new MLP(inputDim, new int[] { 128, 64 }, outputDim);
         }
@@ -144,20 +152,6 @@ public class WarriorAgent : MonoBehaviour
         // 4. Apply IK correction for foot grounding
         if (poseSolver != null)
             poseSolver.Solve();
-
-        // Keep leg bones locked in rest position after IK
-        if (boneController != null)
-        {
-            int[] locked = { 12, 13, 14, 15, 16, 17 };
-            foreach (int idx in locked)
-            {
-                if (boneController.GetBoneTransform(idx) != null)
-                {
-                    boneController.GetBoneTransform(idx).localRotation = boneController.GetRestRotation(idx);
-                    boneController.GetBoneTransform(idx).localPosition = boneController.GetRestPosition(idx);
-                }
-            }
-        }
     }
 
     /// <summary>

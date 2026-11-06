@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Assembly-CSharp-Editor")]
 
 /// <summary>
 /// Picture-in-picture camera controller that displays the highest-scoring warrior's combat pair.

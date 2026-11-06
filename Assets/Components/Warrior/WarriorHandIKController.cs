@@ -62,16 +62,17 @@ public class WarriorHandIKController : MonoBehaviour
         var boneController = GetComponent<WarriorBoneController>();
         if (boneController != null)
         {
-            // Humanoid bone indices from WarriorBoneController:
-            // 6: RightShoulder, 7: RightArm (Upper), 8: RightForeArm (Elbow), 9: RightHand
-            // 2: LeftShoulder, 3: LeftArm (Upper), 4: LeftForeArm (Elbow), 5: LeftHand
-            if (rightShoulder == null) rightShoulder = boneController.GetBoneTransform(7); // Upper arm
-            if (rightElbow == null) rightElbow = boneController.GetBoneTransform(8);
-            if (rightHand == null) rightHand = boneController.GetBoneTransform(9);
+            // Humanoid bone indices from WarriorBoneController.ControlledBones:
+            //  6: LeftUpperArm   7: RightUpperArm
+            //  8: LeftLowerArm   9: RightLowerArm
+            // 10: LeftHand      11: RightHand
+            if (rightShoulder == null) rightShoulder = boneController.GetBoneTransform(7);  // RightUpperArm
+            if (rightElbow == null) rightElbow = boneController.GetBoneTransform(9);       // RightLowerArm
+            if (rightHand == null) rightHand = boneController.GetBoneTransform(11);        // RightHand
 
-            if (leftShoulder == null) leftShoulder = boneController.GetBoneTransform(3); // Upper arm
-            if (leftElbow == null) leftElbow = boneController.GetBoneTransform(4);
-            if (leftHand == null) leftHand = boneController.GetBoneTransform(5);
+            if (leftShoulder == null) leftShoulder = boneController.GetBoneTransform(6);   // LeftUpperArm
+            if (leftElbow == null) leftElbow = boneController.GetBoneTransform(8);         // LeftLowerArm
+            if (leftHand == null) leftHand = boneController.GetBoneTransform(10);          // LeftHand
         }
     }
 

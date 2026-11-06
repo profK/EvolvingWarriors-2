@@ -59,7 +59,8 @@ public class ProceduralFootController : MonoBehaviour
     Vector3 plantedPosition; // X,Z stored when entering Planted state; Y is groundY
     Vector3 stepTargetXZ; // Target X,Z for the current step
     float phaseTimer; // Timer within the current Lifting or Placing phase
-    Vector3 currentFootPosition; // Current world position of the foot (IK target)
+    /// <summary>Current world position of this foot (IK target). Set by the state machine and updated by the pose solver after root movement.</summary>
+    internal Vector3 currentFootPosition; // Current world position of the foot (IK target)
     float groundY = 0f; // Ground plane Y level, set by orchestrator
 
     // --- Properties ---
@@ -240,6 +241,16 @@ public class ProceduralFootController : MonoBehaviour
         stepTargetXZ = plantedPosition; // Reset step target to avoid latent state inconsistency
         state = FootState.Planted;
         phaseTimer = 0f;
+    }
+
+    /// <summary>
+    /// Forces re-initialization after bone transforms have been assigned or the root has been
+    /// moved. Resets the initialized flag so Initialize() will run again and capture fresh positions.
+    /// </summary>
+    internal void ForceReinitialize()
+    {
+        initialized = false;
+        Initialize();
     }
 
     /// <summary>

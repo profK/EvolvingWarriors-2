@@ -64,6 +64,13 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
     Animator animator;
     Vector3 spawnPosition;
 
+    /// <summary>
+    /// When true, ApplyOutputs skips the hips/leg local-position lock.
+    /// Set by WarriorAgent when running in IK mode so the pose solver has full
+    /// control over hips and leg bone positions.
+    /// </summary>
+    public bool IKMode { get; set; }
+
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -131,20 +138,8 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
 
         initialized = true;
 
-        // Calculate root rotation so feet rest at y=0 given current leg orientations
-        Transform leftFoot = boneTransforms.Length > 16 ? boneTransforms[16] : null;
-        if (leftFoot != null)
-        {
-            Vector3 footWorld = leftFoot.position;
-            float dx = footWorld.x - transform.position.x;
-            float dz = footWorld.z - transform.position.z;
-            float distXZ = Mathf.Sqrt(dx*dx + dz*dz);
-            if (distXZ > 0.001f)
-            {
-                float angleRad = Mathf.Atan2(footWorld.y - 0f, distXZ);
-                transform.rotation = Quaternion.Euler(-angleRad * Mathf.Rad2Deg, 0f, 0f) * transform.rotation;
-            }
-        }
+        // No root rotation adjustment — the character spawns at the correct orientation.
+        // Runtime grounding is handled by WarriorPoseSolver.AdjustRootVerticalForGrounding.
     }
 
     public bool IsInitialized => initialized;
@@ -176,7 +171,16 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
             Transform bone = boneTransforms[i];
             if (bone == null) continue;
 
-            // Lock hips (0) and both leg chains (12-17); only update spine-down (1-11)
+            // Lock hips (0) and both leg chains (12-17) only when NOT in IK mode.
+            // In IK mode, the pose solver has full authority over hips and leg positions.
+            if (IKMode && (i == 0 || (i >= 12 && i <= 17)))
+            {
+                // IK mode: only reset rotations, let the pose solver manage positions.
+                bone.localRotation = restLocalRotations[i];
+                bone.localScale = restLocalScales[i];
+                targetLocalRotations[i] = restLocalRotations[i];
+                continue;
+            }
             if (i == 0 || (i >= 12 && i <= 17))
             {
                 bone.localRotation = restLocalRotations[i];
@@ -206,13 +210,18 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
             bone.localScale = restLocalScales[i];
         }
 
-        // Enforce: root transform stays at spawn location.
-        // Prevents physics displacement from bone rotations (Rigidbody constraints may not be frozen).
-        transform.position = spawnPosition;
+        // Enforce: root transform stays at spawn X,Z.
+        // Y is allowed to change so the pose solver can adjust the warrior's
+        // vertical position to keep feet on the ground.
+        Vector3 pos = transform.position;
+        pos.x = spawnPosition.x;
+        pos.z = spawnPosition.z;
+        transform.position = pos;
     }
 
     /// <summary>
     /// Resets all controlled bones to their rest-pose rotations.
+    /// In IK mode, only resets rotations — positions are managed by the pose solver.
     /// </summary>
     public void ResetToRestPose()
     {
@@ -222,16 +231,26 @@ public class WarriorBoneController : MonoBehaviour, IBoneTransformProvider
             Transform bone = boneTransforms[i];
             if (bone == null) continue;
             bone.localRotation = restLocalRotations[i];
-            bone.localPosition = restLocalPositions[i];
-            bone.localScale = restLocalScales[i];
+            if (!IKMode)
+            {
+                bone.localPosition = restLocalPositions[i];
+                bone.localScale = restLocalScales[i];
+            }
+            else
+            {
+                bone.localScale = restLocalScales[i];
+            }
             targetLocalRotations[i] = restLocalRotations[i];
         }
         
         // Keep knees at captured rest bend (do not override with thigh rotation)
         // (Previously copied thigh rot to shin; removed so shins keep their rest pose.)
 
-        // Also restore the root position to spawn location after reset.
-        transform.position = spawnPosition;
+        // Restore root X,Z to spawn location (preserve Y so grounded feet stay grounded).
+        Vector3 pos = transform.position;
+        pos.x = spawnPosition.x;
+        pos.z = spawnPosition.z;
+        transform.position = pos;
         //Quaternion localYRotation = Quaternion.AngleAxis(90, transform.up);
         //transform.rotation = localYRotation * transform.rotation;
     }

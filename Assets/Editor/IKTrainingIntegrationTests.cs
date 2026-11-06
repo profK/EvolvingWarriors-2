@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.IO;
 using UnityEngine;
 
 public class IKTrainingIntegrationTests
@@ -22,6 +23,7 @@ public class IKTrainingIntegrationTests
 
         // Build scene
         IKTrainingSceneBuilder.CreateIKTrainingScene();
-        Assert.IsTrue(System.IO.File.Exists(IKTrainingSceneBuilder.IKScenePath), "IK Training scene file must exist.");
+        Assert.IsTrue(File.Exists(IKTrainingSceneBuilder.IKScenePath), "IK Training scene file must exist.");
+        Assert.IsTrue(File.Exists(IKTrainingSceneBuilder.ScoringRulesAssetPath), "ScoringRules asset must exist.");
     }
 }
