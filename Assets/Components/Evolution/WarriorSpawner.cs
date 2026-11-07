@@ -77,13 +77,15 @@ public class WarriorSpawner : MonoBehaviour
                     0f,
                     gridOffsetZ + row * interPairDistance);
 
-                // Warrior A: offset -Z/2, facing +Z (toward opponent)
+                // Warrior A: placed at +Z offset from center
                 Vector3 posA = centerPos + Vector3.forward * (pairSeparation * 0.5f);
-                Quaternion rotA = Quaternion.LookRotation(-Vector3.forward); // Face right (90° Y rotation)
 
-                // Warrior B: offset +Z/2, facing -Z (toward opponent)
+                // Warrior B: placed at -Z offset from center
                 Vector3 posB = centerPos - Vector3.forward * (pairSeparation * 0.5f);
-                Quaternion rotB = Quaternion.LookRotation(Vector3.forward); // Face left (270° Y rotation)
+
+                // Face each other by looking at the opponent's position (robust to model orientation)
+                Quaternion rotA = Quaternion.LookRotation(posB - posA);
+                Quaternion rotB = Quaternion.LookRotation(posA - posB);
 
                 // Instantiate warrior A
                 GameObject warriorA = Instantiate(warriorPrefab, posA, rotA);
