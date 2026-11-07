@@ -23,7 +23,7 @@ public class IKWarriorMLPAdapter : MonoBehaviour
 {
     public const int OutputDimension = 6;
 
-    [SerializeField] WarriorHandIKController handIKController;
+    [SerializeField] internal WarriorHandIKController handIKController;
 
     void Awake()
     {

@@ -7,13 +7,13 @@ using UnityEngine;
 public class WarriorHandIKController : MonoBehaviour
 {
     [Header("Bones")]
-    [SerializeField] Transform modelRoot;
-    [SerializeField] Transform rightShoulder;
-    [SerializeField] Transform rightElbow;
-    [SerializeField] Transform rightHand;
-    [SerializeField] Transform leftShoulder;
-    [SerializeField] Transform leftElbow;
-    [SerializeField] Transform leftHand;
+    [SerializeField] internal Transform modelRoot;
+    [SerializeField] internal Transform rightShoulder;
+    [SerializeField] internal Transform rightElbow;
+    [SerializeField] internal Transform rightHand;
+    [SerializeField] internal Transform leftShoulder;
+    [SerializeField] internal Transform leftElbow;
+    [SerializeField] internal Transform leftHand;
 
     [Header("IK Weights")]
     [Range(0f, 1f)]
@@ -31,8 +31,8 @@ public class WarriorHandIKController : MonoBehaviour
 
     private PolarIKTargetConverter converter;
     private PolarIKTargetConverter.HandTargets currentTargets;
-    private float rightArmLength;
-    private float leftArmLength;
+    internal float rightArmLength;
+    internal float leftArmLength;
     private float[] lastOutputs;
 
     public PolarIKTargetConverter Converter => converter;

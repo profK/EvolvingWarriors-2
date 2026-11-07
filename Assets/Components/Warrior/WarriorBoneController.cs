@@ -3,13 +3,14 @@ using UnityEngine;
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Assembly-CSharp-Editor")]
 
 /// <summary>
-/// Minimal interface for accessing bone transforms by index.
+/// Minimal interface for accessing bone transforms and rest-pose data by index.
 /// Allows both the real WarriorBoneController and test mocks to work with WarriorPoseSolver.
 /// Defined here so it compiles in the main Assembly-CSharp project without editor regeneration.
 /// </summary>
 public interface IBoneTransformProvider
 {
     Transform GetBoneTransform(int boneIndex);
+    Vector3 GetRestPosition(int boneIndex);
 }
 
 /// <summary>

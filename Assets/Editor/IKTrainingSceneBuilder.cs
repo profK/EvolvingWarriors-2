@@ -140,10 +140,10 @@ public class IKTrainingSceneBuilder : EditorWindow
 
     static void BuildArena()
     {
-        // Ground plane
+        // Ground plane — Y=0 to match WarriorPoseSolver.groundY default
         GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
         ground.name = "ArenaGround";
-        ground.transform.position = new Vector3(0, -0.5f, 0);
+        ground.transform.position = new Vector3(0, 0f, 0);
         ground.transform.localScale = new Vector3(30, 1, 30);
 
         Material groundMat = new Material(Shader.Find("Universal Render Pipeline/Lit"));

@@ -52,7 +52,24 @@ public class WarriorPoseSolver : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        AutoDetectGroundY();
         Initialize();
+    }
+
+    /// <summary>
+    /// Auto-detects the ground plane Y by raycasting down from spawn position.
+    /// Falls back to default groundY (0) if no ground is found.
+    /// This handles both Y=0 ground (default) and Y=-0.5 ground (existing IK Training scene).
+    /// </summary>
+    void AutoDetectGroundY()
+    {
+        // Raycast down from spawn position to find the ground plane
+        Vector3 origin = transform.position + Vector3.up * 2f; // Start 2m above spawn
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 10f))
+        {
+            groundY = hit.point.y;
+        }
+        // else: keep default groundY = 0
     }
 
     /// <summary>
@@ -190,47 +207,35 @@ public class WarriorPoseSolver : MonoBehaviour
         Vector3 comOffset = hips.position - footMidpoint;
         float horizontalComOffset = new Vector3(comOffset.x, 0, comOffset.z).magnitude;
 
-        // 4. Evaluate balance — if CoM shifted beyond threshold, move hips to center over feet
-        // We move the hips bone's local position horizontally toward the foot midpoint.
-        // This centers the hips over the feet, keeping feet planted.
+        // 4. Evaluate balance — if CoM shifted beyond threshold, snap hips horizontally toward foot midpoint.
+        // Uses ABSOLUTE positioning (rest pose + clamped offset) to prevent drift/feedback loops.
         if (horizontalComOffset > balanceThreshold)
         {
             Vector3 comDir = new Vector3(comOffset.x, 0, comOffset.z);
             if (comDir.sqrMagnitude > 0.001f)
             {
                 comDir /= comDir.magnitude;
-                
-                // Calculate the horizontal offset needed to center hips over foot midpoint
-                // We want hips to be at the foot midpoint horizontally
-                Vector3 desiredHipsOffset = -comOffset;
-                desiredHipsOffset.y = 0f; // Keep only horizontal component
-                
-                // Limit the movement to keep hips within a reasonable range over the feet
-                // Don't move more than the balance threshold (keeps hips over the foot base)
-                float moveDistance = Mathf.Min(desiredHipsOffset.magnitude, balanceThreshold);
-                Vector3 moveDirection = desiredHipsOffset.normalized;
-                Vector3 hipMove = moveDirection * moveDistance;
-                
-                // Apply the horizontal movement to the hips bone's local position
-                // This shifts the hips over the feet while keeping feet planted
-                Vector3 currentLocalPos = hips.localPosition;
-                Vector3 newLocalPos = currentLocalPos + new Vector3(hipMove.x, 0f, hipMove.z);
-                hips.localPosition = newLocalPos;
-                
+
+                // Move hips toward foot midpoint, clamped to threshold distance
+                Vector3 hipOffset = -comDir * Mathf.Min(horizontalComOffset, balanceThreshold);
+
+                // Apply to hips: rest position + offset (ABSOLUTE, not cumulative)
+                Vector3 hipsRest = boneController.GetRestPosition(Hips);
+                hips.localPosition = new Vector3(hipsRest.x + hipOffset.x, hipsRest.y, hipsRest.z + hipOffset.z);
+
                 // Also move the spine and chest bones to maintain body alignment
                 Transform spine = boneController.GetBoneTransform(1); // Spine
-                Transform chest = boneController.GetBoneTransform(2); // Chest
-                
                 if (spine != null)
                 {
-                    // Move spine by half the hip movement to distribute the shift
-                    spine.localPosition = spine.localPosition + new Vector3(hipMove.x * 0.5f, 0f, hipMove.z * 0.5f);
+                    Vector3 spineRest = boneController.GetRestPosition(1);
+                    spine.localPosition = new Vector3(spineRest.x + hipOffset.x * 0.5f, spineRest.y, spineRest.z + hipOffset.z * 0.5f);
                 }
-                
+
+                Transform chest = boneController.GetBoneTransform(2); // Chest
                 if (chest != null)
                 {
-                    // Move chest by one-third the hip movement
-                    chest.localPosition = chest.localPosition + new Vector3(hipMove.x * 0.33f, 0f, hipMove.z * 0.33f);
+                    Vector3 chestRest = boneController.GetRestPosition(2);
+                    chest.localPosition = new Vector3(chestRest.x + hipOffset.x * 0.33f, chestRest.y, chestRest.z + hipOffset.z * 0.33f);
                 }
             }
         }

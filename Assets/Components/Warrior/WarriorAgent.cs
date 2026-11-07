@@ -72,6 +72,7 @@ public class WarriorAgent : MonoBehaviour
     // Pre-allocated buffers for inference
     float[] inputBuffer;
     float[] outputBuffer;
+    Vector3 spawnPosition; // Captured at spawn time to lock root X,Z
 
     void Awake()
     {
@@ -98,6 +99,9 @@ public class WarriorAgent : MonoBehaviour
         // The pose solver has full authority over those bones.
         if (boneController != null)
             boneController.IKMode = (controlMode == WarriorControlMode.HandIKControl);
+
+        // Capture spawn position for root locking (used in HandIKControl mode)
+        spawnPosition = transform.position;
 
         // Create MLP if not assigned
         if (neuralNetwork == null)
@@ -133,6 +137,9 @@ public class WarriorAgent : MonoBehaviour
     {
         if (!IsActive) return;
 
+        // DEBUG: Increment frame counter every FixedUpdate so logging works
+        debugFrameCounter++;
+
         // 1. Encode observations
         observationEncoder.Encode(inputBuffer);
 
@@ -143,15 +150,93 @@ public class WarriorAgent : MonoBehaviour
         if (controlMode == WarriorControlMode.HandIKControl && handIKAdapter != null)
         {
             handIKAdapter.ApplyOutputs(outputBuffer);
+
+            // In IK mode, the bone controller's ApplyOutputs is not called, so we must
+            // lock the root X,Z ourselves (prevents drift from pose solver balance corrections).
+            if (boneController != null)
+                LockRootPosition();
+
+            // DEBUG: Log AFTER ApplyOutputs so we see the updated targets
+            if (debugFrameCounter % 60 == 0) DebugIKOutputs();
         }
         else if (boneController != null)
         {
             boneController.ApplyOutputs(outputBuffer);
+
+            // DEBUG: Log AFTER ApplyOutputs
+            if (debugFrameCounter % 60 == 0) DebugBoneOutputs();
         }
 
         // 4. Apply IK correction for foot grounding
         if (poseSolver != null)
             poseSolver.Solve();
+    }
+
+    /// <summary>
+    /// Locks the root transform's X and Z to spawn position, preserving Y.
+    /// Called in HandIKControl mode since boneController.ApplyOutputs (which does this)
+    /// is bypassed in that mode.
+    /// </summary>
+    void LockRootPosition()
+    {
+        Vector3 pos = transform.position;
+        pos.x = spawnPosition.x;
+        pos.z = spawnPosition.z;
+        transform.position = pos;
+    }
+
+    // DEBUG: Frame counter incremented every FixedUpdate
+    int debugFrameCounter = 0;
+
+    void DebugIKOutputs()
+    {
+        if (outputBuffer == null || outputBuffer.Length < 6) return;
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append($"[IK #{name}] MLP=[rR={outputBuffer[0]:F1} azR={outputBuffer[1]:F1} elR={outputBuffer[2]:F1} | rL={outputBuffer[3]:F1} azL={outputBuffer[4]:F1} elL={outputBuffer[5]:F1}] ");
+
+        if (handIKAdapter != null && handIKAdapter.handIKController != null)
+        {
+            var ikCtrl = handIKAdapter.handIKController;
+            var t = ikCtrl.CurrentTargets;
+            sb.Append($"RTgt={t.rightWorldPos:F2} LTgt={t.leftWorldPos:F2} ");
+
+            if (ikCtrl.rightHand != null) sb.Append($"RHand={ikCtrl.rightHand.position:F2} ");
+            if (ikCtrl.leftHand != null) sb.Append($"LHand={ikCtrl.leftHand.position:F2} ");
+            if (ikCtrl.modelRoot != null) sb.Append($"Root={ikCtrl.modelRoot.position:F2} ");
+            sb.Append($"ArmLens=({ikCtrl.rightArmLength:F2},{ikCtrl.leftArmLength:F2})");
+        }
+
+        if (boneController != null)
+        {
+            var hip = boneController.GetBoneTransform(0);
+            if (hip != null) sb.Append($" Hips={hip.position:F2}");
+        }
+
+        Debug.Log(sb.ToString());
+    }
+
+    void DebugBoneOutputs()
+    {
+        if (outputBuffer == null || outputBuffer.Length < 57) return;
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append($"[BONE #{name}] ");
+        string[] boneNames = { "LUpArm", "RUpArm", "LLowArm", "RLowArm" };
+        for (int i = 0; i < 4; i++)
+        {
+            int baseIdx = 6 + i; // indices 6,7,8,9
+            if (i > 0) sb.Append(" ");
+            sb.Append($"{boneNames[i]}=({outputBuffer[baseIdx]:F1},{outputBuffer[baseIdx+1]:F1},{outputBuffer[baseIdx+2]:F1})");
+        }
+
+        if (boneController != null)
+        {
+            var hip = boneController.GetBoneTransform(0);
+            if (hip != null) sb.Append($" Hips={hip.position:F2}");
+        }
+
+        Debug.Log(sb.ToString());
     }
 
     /// <summary>

@@ -10,11 +10,15 @@ using UnityEditor;
 public class MockBoneController : MonoBehaviour, IBoneTransformProvider
 {
     Transform[] bones = new Transform[19]; // Matches WarriorBoneController.BoneCount
+    Vector3[] restPositions = new Vector3[19];
 
     public void SetBoneTransform(int index, Transform bone)
     {
         if (index >= 0 && index < bones.Length)
+        {
             bones[index] = bone;
+            restPositions[index] = bone.localPosition;
+        }
     }
 
     public Transform GetBoneTransform(int boneIndex)
@@ -22,6 +26,13 @@ public class MockBoneController : MonoBehaviour, IBoneTransformProvider
         if (boneIndex < 0 || boneIndex >= bones.Length)
             throw new System.ArgumentOutOfRangeException(nameof(boneIndex));
         return bones[boneIndex];
+    }
+
+    public Vector3 GetRestPosition(int boneIndex)
+    {
+        if (boneIndex < 0 || boneIndex >= restPositions.Length)
+            throw new System.ArgumentOutOfRangeException(nameof(boneIndex));
+        return restPositions[boneIndex];
     }
 }
 
